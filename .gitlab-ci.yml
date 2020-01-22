@@ -41,7 +41,9 @@ test:
         - merge_requests
 
 deploy:
-    image: mwienk/docker-lftp
+    image: alpine
+    before_script:
+        - apk --no-cache add lftp ca-certificates openssh
     stage: deploy
     environment:
         name: production
