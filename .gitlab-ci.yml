@@ -53,4 +53,4 @@ deploy:
     cache:
         policy: pull
     script:
-        - lftp -c "open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST; mirror -Rev --transfer-all ./dist/rechenmodul/ ./ --ignore-time --parallel=10"
+        - lftp -c "set ssl:check-hostname no; open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST; mirror -Rev --transfer-all ./dist/rechenmodul/ ./ --ignore-time --parallel=10"
