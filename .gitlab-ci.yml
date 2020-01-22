@@ -1,0 +1,56 @@
+variables:
+    PROJECT_URL: 'https://rechenmodul.robingenz.de/'
+
+stages:
+    - build
+    - test
+    - deploy
+
+cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+        - node_modules/
+    
+build:
+    image: node:10
+    stage: build
+    script:
+        - node -v
+        - npm -v
+        - npm install --quiet
+        - npm run build:prod
+    artifacts:
+        paths:
+            - dist/
+    only:
+        - master
+        - merge_requests
+
+test:
+    stage: test
+    image: gitlab.robingenz.de:4567/robingenz/docker-node-chrome/node-chrome:v1.0.0
+    tags:
+        - docker
+    script:
+        - node -v
+        - npm -v
+        - npm install --quiet
+        - npm run test:ci
+    only:
+        - master
+        - merge_requests
+
+deploy:
+    image: mwienk/docker-lftp
+    stage: deploy
+    environment:
+        name: production
+        url: $PROJECT_URL
+    only:
+        - master
+    dependencies:
+        - build
+    cache:
+        policy: pull
+    script:
+        - lftp -c "open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST; mirror -Rev --transfer-all ./dist/rechenmodul/ ./ --ignore-time --parallel=10"
