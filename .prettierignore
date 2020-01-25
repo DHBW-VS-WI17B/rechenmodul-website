@@ -1,0 +1,7 @@
+*.html
+*.htm
+package.json
+package-lock.json
+tslint.json
+tsconfig.json
+webpack.*

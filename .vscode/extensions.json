@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "ms-vscode.vscode-typescript-tslint-plugin",
+        "hookyqr.beautify",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode"
+    ]
+}
