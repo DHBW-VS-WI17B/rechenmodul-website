@@ -1,0 +1,36 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+app-root {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+@media(max-width: 599px) {
+    app-root {
+        top: 56px;
+    }
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+}
+
+.padding {
+    padding: 16px;
+}
