@@ -10,7 +10,7 @@ cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
         - node_modules/
-    
+
 build:
     image: node:10
     stage: build
@@ -26,7 +26,7 @@ build:
         - master
         - merge_requests
 
-test:
+.test:
     stage: test
     image: gitlab.robingenz.de:4567/robingenz/docker-node-chrome/node-chrome:v1.0.0
     tags:
