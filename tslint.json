@@ -147,6 +147,7 @@
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "directive-class-suffix": true,
-    "prefer-immediate-return": false
+    "prefer-immediate-return": false,
+    "max-classes-per-file": false
   }
 }
