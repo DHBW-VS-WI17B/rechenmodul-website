@@ -1,1 +1,77 @@
-<p>point-sequence works!</p>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Punktfolge</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="pointForm">
+            <mat-form-field class="inputPointValue">
+                <input matInput
+                       placeholder="X-Value"
+                       value=""
+                       formControlName="xValueControl">
+            </mat-form-field>
+            <mat-form-field class="inputPointValue">
+                <input matInput
+                       placeholder="Y-Value"
+                       value=""
+                       formControlName="yValueControl">
+            </mat-form-field>
+            <button mat-button
+                    (click)=addPoint()
+                    [disabled]="!this.pointForm.valid">
+                <mat-icon>add</mat-icon>
+            </button>
+        </form>
+
+        <table mat-table
+               [dataSource]="dataSource">
+
+            <ng-container matColumnDef="select">
+                <th mat-header-cell
+                    *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                  [checked]="selection.hasValue() && isAllSelected()"
+                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                  [aria-label]="checkboxLabel()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell
+                    *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                                  (change)="$event ? selection.toggle(row) : null"
+                                  [checked]="selection.isSelected(row)"
+                                  [aria-label]="checkboxLabel(row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="position">
+                <th mat-header-cell
+                    *matHeaderCellDef> No. </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="xValue">
+                <th mat-header-cell
+                    *matHeaderCellDef> X-Value </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.value.x}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="yValue">
+                <th mat-header-cell
+                    *matHeaderCellDef> Y-Value </th>
+                <td mat-cell
+                    *matCellDef="let element"> {{element.value.y}} </td>
+            </ng-container>
+
+            <tr mat-header-row
+                *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row
+                *matRowDef="let row; columns: displayedColumns;"
+                (click)="selection.toggle(row)">
+            </tr>
+        </table>
+    </mat-card-content>
+</mat-card>
