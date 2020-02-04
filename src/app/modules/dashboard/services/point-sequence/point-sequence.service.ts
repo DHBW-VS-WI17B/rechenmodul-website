@@ -17,4 +17,12 @@ export class PointSequenceService {
     public addPoint(value: IPointValue): void {
         this.pointsService.addPoint(value);
     }
+
+    public removePointById(id: number): void {
+        this.pointsService.removePointById(id);
+    }
+
+    public updatePointById(id: number, pointValue: IPointValue): void {
+        this.pointsService.updatePointById(id, pointValue);
+    }
 }

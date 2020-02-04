@@ -29,10 +29,10 @@ export class PointsService {
 
     public removePointById(id: number): void {
         const currentPointsArr = this.getPoints();
-        const updatedPointsArr = _.remove(currentPointsArr, point => {
+        _.remove(currentPointsArr, point => {
             return point.id === id;
         });
-        this.setPoints(updatedPointsArr);
+        this.setPoints(currentPointsArr);
     }
 
     public updatePointById(id: number, value: IPointValue): void {

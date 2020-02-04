@@ -1,9 +1,11 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { IPoint } from '../../interfaces';
 import { PointSequenceService } from '../../services';
+import { EditPointDialogComponent } from '../edit-point-dialog/edit-point-dialog.component';
 
 @Component({
     selector: 'app-point-sequence',
@@ -11,14 +13,14 @@ import { PointSequenceService } from '../../services';
     styleUrls: ['./point-sequence.component.scss'],
 })
 export class PointSequenceComponent implements OnInit {
-    constructor(private pointSequenceService: PointSequenceService) {}
+    constructor(private pointSequenceService: PointSequenceService, public dialog: MatDialog) {}
 
     private points: IPoint[] = [];
     private xValueControl: FormControl;
     private yValueControl: FormControl;
 
     public pointForm: FormGroup;
-    public displayedColumns: string[] = ['select', 'position', 'xValue', 'yValue'];
+    public displayedColumns: string[] = ['select', 'xValue', 'yValue', 'actions'];
     public dataSource = new MatTableDataSource<IPoint>(this.points);
     public selection = new SelectionModel<IPoint>(true, []);
 
@@ -45,7 +47,7 @@ export class PointSequenceComponent implements OnInit {
     isAllSelected(): boolean {
         const numSelected = this.selection.selected.length;
         const numRows = this.dataSource.data.length;
-        return numSelected === numRows;
+        return numSelected === numRows && this.dataSource.data.length !== 0;
     }
 
     masterToggle(): void {
@@ -75,5 +77,27 @@ export class PointSequenceComponent implements OnInit {
                 this.selectAllRows();
             }
         }
+    }
+
+    removeSelectedPoints(): void {
+        this.selection.selected.forEach(point => {
+            console.log(point.id);
+            this.pointSequenceService.removePointById(point.id);
+            this.selection.deselect(point);
+        });
+    }
+
+    editPoint(event: any, point: IPoint): void {
+        event.stopPropagation();
+        const dialogRef = this.dialog.open(EditPointDialogComponent, {
+            width: '450px',
+            data: point.value,
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.pointSequenceService.updatePointById(point.id, result);
+            }
+        });
     }
 }
