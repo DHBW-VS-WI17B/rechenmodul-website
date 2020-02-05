@@ -17,7 +17,7 @@ build:
     script:
         - node -v
         - npm -v
-        - npm install --quiet
+        - npm config set unsafe-perm true; npm install --quiet
         - npm run build:prod
     artifacts:
         paths:
@@ -34,7 +34,7 @@ build:
     script:
         - node -v
         - npm -v
-        - npm install --quiet
+        - npm config set unsafe-perm true; npm install --quiet
         - npm run test:ci
     only:
         - master

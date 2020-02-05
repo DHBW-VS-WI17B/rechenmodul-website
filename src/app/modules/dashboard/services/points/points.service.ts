@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IPoint } from '../../interfaces';
-import { IPointValue } from '../../interfaces/point-element';
+import { IPointValue } from '../../interfaces/point-value';
 
 @Injectable({
     providedIn: 'root',

@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 // tslint:disable-next-line: ordered-imports
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { IPointValue } from '@app/modules/dashboard/interfaces/point-element';
+import { IPointValue } from '../../interfaces';
 
 @Component({
     selector: 'app-edit-point-dialog',

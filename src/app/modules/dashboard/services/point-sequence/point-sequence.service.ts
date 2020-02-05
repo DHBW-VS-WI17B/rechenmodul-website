@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IPoint } from '../../interfaces';
-import { IPointValue } from '../../interfaces/point-element';
+import { IPointValue } from '../../interfaces/point-value';
 import { PointsService } from '../points/points.service';
 
 @Injectable({

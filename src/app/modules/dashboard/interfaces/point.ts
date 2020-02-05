@@ -1,4 +1,4 @@
-import { IPointValue } from './point-element';
+import { IPointValue } from './point-value';
 
 export interface IPoint {
     readonly id: number;
