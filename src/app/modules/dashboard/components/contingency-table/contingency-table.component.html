@@ -1,1 +1,51 @@
-<p>contingency-table works!</p>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Kontingenztafel</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table"
+             *ngIf="table">
+            <div class="row">
+                <div class="col">X/Y</div>
+                <div class="col"
+                     *ngFor="let item_y of table.y; index as index_y">
+                    <input type="number"
+                           [ngModel]="getValueFor(VALUE_TYPE_Y, index_y)"
+                           (ngModelChange)="updateValueFor(VALUE_TYPE_Y, $event, index_y)"
+                           [placeholder]="getPlaceholderFor(VALUE_TYPE_Y, index_y)">
+                </div>
+                <div class="col">Summe</div>
+            </div>
+            <div class="row"
+                 *ngFor="let item_x of table.x; index as index_x">
+                <div class="col">
+                    <input type="number"
+                           [ngModel]="getValueFor(VALUE_TYPE_X, index_x)"
+                           (ngModelChange)="updateValueFor(VALUE_TYPE_X, $event, index_x)"
+                           [placeholder]="getPlaceholderFor(VALUE_TYPE_X, index_x)">
+                </div>
+                <div class="col"
+                     *ngFor="let item_y of table.y; index as index_y">
+                    <input type="number"
+                           [ngModel]="getValueFor(VALUE_TYPE_H, index_x, index_y)"
+                           (ngModelChange)="updateValueFor(VALUE_TYPE_H, $event, index_x, index_y)"
+                           [placeholder]="getPlaceholderFor(VALUE_TYPE_H, index_x, index_y)">
+                    <!-- [disabled]="getValueForRowYByIndex(points, y) === undefined || getValueForColumnXByIndex(points, x) === undefined" -->
+                </div>
+                <div class="col">
+                    <span>{{ getSumFor(VALUE_TYPE_HX, index_x) || getPlaceholderFor(VALUE_TYPE_HY, index_x)}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">Summe</div>
+                <div class="col"
+                     *ngFor="let item_y of table.y; index as index_y">
+                    <span>{{ getSumFor(VALUE_TYPE_HY, index_y) || getPlaceholderFor(VALUE_TYPE_HY, index_y) }}</span>
+                </div>
+                <div class="col">
+                    <span>{{ getSumFor(VALUE_TYPE_HXY) || getPlaceholderFor(VALUE_TYPE_HXY) }}</span>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

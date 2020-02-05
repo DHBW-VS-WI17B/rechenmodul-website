@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IPoint } from '../../interfaces';
-import { IPointValue } from '../../interfaces/point-value';
+import { IPoint, IPointValue } from '../../interfaces';
 
 @Injectable({
     providedIn: 'root',
 })
 export class PointsService {
-    private pointsSubj: BehaviorSubject<IPoint[]> = new BehaviorSubject([]);
+    private pointsSubj: BehaviorSubject<IPoint[]> = new BehaviorSubject<IPoint[]>([]);
     private nextPointId: number = 0;
 
     constructor() {}
@@ -33,6 +32,17 @@ export class PointsService {
             return point.id === id;
         });
         this.setPoints(currentPointsArr);
+    }
+
+    public removePointByValue(value: IPointValue): void {
+        const currentPointsArr = this.getPoints();
+        const pointToRemove = _.find(currentPointsArr, point => {
+            return point.value.x === value.x && point.value.y === value.y;
+        });
+        if (!pointToRemove) {
+            return;
+        }
+        this.removePointById(pointToRemove.id);
     }
 
     public updatePointById(id: number, value: IPointValue): void {

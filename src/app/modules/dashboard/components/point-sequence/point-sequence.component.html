@@ -18,7 +18,7 @@
             </mat-form-field>
             <button mat-button
                     (click)=addPoint()
-                    [disabled]="!this.pointForm.valid">
+                    [disabled]="!this.pointForm?.valid">
                 <mat-icon>add</mat-icon>
             </button>
         </form>

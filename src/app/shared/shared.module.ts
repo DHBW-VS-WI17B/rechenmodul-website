@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MaterialModule } from './material';
 
 @NgModule({
-    imports: [MaterialModule],
+    imports: [MaterialModule, FormsModule],
     declarations: [],
-    exports: [MaterialModule],
+    exports: [MaterialModule, FormsModule],
 })
 export class SharedModule {}

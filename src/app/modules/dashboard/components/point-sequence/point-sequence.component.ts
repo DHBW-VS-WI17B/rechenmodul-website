@@ -16,10 +16,10 @@ export class PointSequenceComponent implements OnInit {
     constructor(private pointSequenceService: PointSequenceService, public dialog: MatDialog) {}
 
     private points: IPoint[] = [];
-    private xValueControl: FormControl;
-    private yValueControl: FormControl;
+    private xValueControl: FormControl | undefined;
+    private yValueControl: FormControl | undefined;
 
-    public pointForm: FormGroup;
+    public pointForm: FormGroup | undefined;
     public displayedColumns: string[] = ['select', 'xValue', 'yValue', 'actions'];
     public dataSource = new MatTableDataSource<IPoint>(this.points);
     public selection = new SelectionModel<IPoint>(true, []);
@@ -67,15 +67,16 @@ export class PointSequenceComponent implements OnInit {
     }
 
     addPoint(): void {
-        if (this.pointForm.valid) {
-            let selectAll = false;
-            if (this.isAllSelected()) {
-                selectAll = true;
-            }
-            this.pointSequenceService.addPoint({ x: this.xValueControl.value, y: this.yValueControl.value });
-            if (selectAll) {
-                this.selectAllRows();
-            }
+        if (!this.pointForm || !this.xValueControl || !this.yValueControl || !this.pointForm.valid) {
+            return;
+        }
+        let selectAll = false;
+        if (this.isAllSelected()) {
+            selectAll = true;
+        }
+        this.pointSequenceService.addPoint({ x: this.xValueControl.value, y: this.yValueControl.value });
+        if (selectAll) {
+            this.selectAllRows();
         }
     }
 

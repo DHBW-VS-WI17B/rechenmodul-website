@@ -1,10 +1,32 @@
 <header>
     <mat-toolbar color="primary">
-        <span>Rechenmodul</span>
+        <mat-toolbar-row>
+            <span>Rechenmodul</span>
+            <span class="spacer"></span>
+            <button mat-icon-button
+                    [matMenuTriggerFor]="appMenu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+        </mat-toolbar-row>
     </mat-toolbar>
 </header>
 
+<mat-menu #appMenu="matMenu">
+    <button mat-menu-item
+            (click)="openFileDialog()">CSV-Datei importieren</button>
+    <input type="file"
+           id="file_input"
+           hidden />
+</mat-menu>
 
-<main class="padding">
-    <app-point-sequence></app-point-sequence>
+<main class="padding-8">
+    <div class="row">
+        <div class="column">
+            <app-point-sequence class="margin-8"></app-point-sequence>
+            <app-contingency-table class="margin-8"></app-contingency-table>
+        </div>
+        <div class="column">
+            <!-- app-result -->
+        </div>
+    </div>
 </main>

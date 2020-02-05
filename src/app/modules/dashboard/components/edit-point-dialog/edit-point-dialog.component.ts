@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-// tslint:disable-next-line: ordered-imports
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { IPointValue } from '../../interfaces';
 
@@ -10,10 +9,10 @@ import { IPointValue } from '../../interfaces';
     styleUrls: ['./edit-point-dialog.component.scss'],
 })
 export class EditPointDialogComponent implements OnInit {
-    private xValueControl: FormControl;
-    private yValueControl: FormControl;
+    private xValueControl: FormControl | undefined;
+    private yValueControl: FormControl | undefined;
 
-    public pointForm: FormGroup;
+    public pointForm: FormGroup | undefined;
 
     constructor(public dialogRef: MatDialogRef<EditPointDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: IPointValue) {}
 
@@ -39,6 +38,9 @@ export class EditPointDialogComponent implements OnInit {
     }
 
     edit(): void {
+        if (!this.xValueControl || !this.yValueControl) {
+            return;
+        }
         const pointValue: IPointValue = { x: this.xValueControl.value, y: this.yValueControl.value };
         this.dialogRef.close(pointValue);
     }
