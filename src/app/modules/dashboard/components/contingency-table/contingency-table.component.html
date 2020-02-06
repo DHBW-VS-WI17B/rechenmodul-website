@@ -8,42 +8,51 @@
             <div class="row">
                 <div class="col">X/Y</div>
                 <div class="col"
-                     *ngFor="let item_y of table.y; index as index_y">
+                     *ngFor="let item_y of table.y; index as index_y; trackBy: trackByFn">
                     <input type="number"
-                           [ngModel]="getValueFor(VALUE_TYPE_Y, index_y)"
-                           (ngModelChange)="updateValueFor(VALUE_TYPE_Y, $event, index_y)"
-                           [placeholder]="getPlaceholderFor(VALUE_TYPE_Y, index_y)">
+                           [ngModel]="getValueFor(VALUE_TYPE_Y, index_y, undefined)"
+                           (ngModelChange)="updateValueFor(VALUE_TYPE_Y, $event, index_y, undefined)"
+                           [placeholder]="getPlaceholderFor(VALUE_TYPE_Y, index_y, undefined)">
                 </div>
                 <div class="col">Summe</div>
             </div>
             <div class="row"
-                 *ngFor="let item_x of table.x; index as index_x">
+                 *ngFor="let item_x of table.x; index as index_x; trackBy: trackByFn">
                 <div class="col">
                     <input type="number"
-                           [ngModel]="getValueFor(VALUE_TYPE_X, index_x)"
-                           (ngModelChange)="updateValueFor(VALUE_TYPE_X, $event, index_x)"
-                           [placeholder]="getPlaceholderFor(VALUE_TYPE_X, index_x)">
+                           [ngModel]="getValueFor(VALUE_TYPE_X, index_x, undefined)"
+                           (ngModelChange)="updateValueFor(VALUE_TYPE_X, $event, index_x, undefined)"
+                           [placeholder]="getPlaceholderFor(VALUE_TYPE_X, index_x, undefined)">
                 </div>
                 <div class="col"
-                     *ngFor="let item_y of table.y; index as index_y">
+                     *ngFor="let item_y of table.y; index as index_y; trackBy: trackByFn">
                     <input type="number"
                            [ngModel]="getValueFor(VALUE_TYPE_H, index_x, index_y)"
                            (ngModelChange)="updateValueFor(VALUE_TYPE_H, $event, index_x, index_y)"
-                           [placeholder]="getPlaceholderFor(VALUE_TYPE_H, index_x, index_y)">
-                    <!-- [disabled]="getValueForRowYByIndex(points, y) === undefined || getValueForColumnXByIndex(points, x) === undefined" -->
+                           [placeholder]="getPlaceholderFor(VALUE_TYPE_H, index_x, index_y)"
+                           [disabled]="getValueFor(VALUE_TYPE_Y, index_y, undefined) === undefined || getValueFor(VALUE_TYPE_X, index_x, undefined) === undefined">
                 </div>
                 <div class="col">
-                    <span>{{ getSumFor(VALUE_TYPE_HX, index_x) || getPlaceholderFor(VALUE_TYPE_HY, index_x)}}</span>
+                    <input type="number"
+                           readonly
+                           [ngModel]="getSumFor(VALUE_TYPE_HX, index_x)"
+                           [placeholder]="getPlaceholderFor(VALUE_TYPE_HY, index_x, undefined)">
                 </div>
             </div>
             <div class="row">
                 <div class="col">Summe</div>
                 <div class="col"
                      *ngFor="let item_y of table.y; index as index_y">
-                    <span>{{ getSumFor(VALUE_TYPE_HY, index_y) || getPlaceholderFor(VALUE_TYPE_HY, index_y) }}</span>
+                    <input type="number"
+                           readonly
+                           [ngModel]="getSumFor(VALUE_TYPE_HY, index_y)"
+                           [placeholder]="getPlaceholderFor(VALUE_TYPE_HY, index_y, undefined)">
                 </div>
                 <div class="col">
-                    <span>{{ getSumFor(VALUE_TYPE_HXY) || getPlaceholderFor(VALUE_TYPE_HXY) }}</span>
+                    <input type="number"
+                           readonly
+                           [ngModel]="getSumFor(VALUE_TYPE_HXY, undefined)"
+                           [placeholder]="getPlaceholderFor(VALUE_TYPE_HXY, undefined, undefined)">
                 </div>
             </div>
         </div>

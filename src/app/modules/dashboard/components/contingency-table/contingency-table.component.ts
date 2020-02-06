@@ -40,7 +40,7 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
         });
     }
 
-    public getValueFor(valueType: ContingencyTableValueType, index1: number, index2?: number): number | undefined {
+    public getValueFor(valueType: ContingencyTableValueType, index1: number, index2: number | undefined): number | undefined {
         let value = undefined;
         if (this.table === undefined) {
             return value;
@@ -62,7 +62,7 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
         return value;
     }
 
-    public updateValueFor(valueType: ContingencyTableValueType, updatedValue: number, index1: number, index2?: number): void {
+    public updateValueFor(valueType: ContingencyTableValueType, updatedValue: number, index1: number, index2: number | undefined): void {
         if (this.table === undefined) {
             return;
         }
@@ -90,7 +90,7 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getPlaceholderFor(valueType: ContingencyTableValueType, index1?: number, index2?: number) {
+    public getPlaceholderFor(valueType: ContingencyTableValueType, index1: number | undefined, index2: number | undefined) {
         let placeholder = '';
         switch (valueType) {
             case this.VALUE_TYPE_X:
@@ -115,7 +115,7 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
         return placeholder;
     }
 
-    public getSumFor(valueType: ContingencyTableValueType, index?: number): number | undefined {
+    public getSumFor(valueType: ContingencyTableValueType, index: number | undefined): number | undefined {
         if (!this.table) {
             return;
         }
@@ -147,5 +147,9 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
             }
         }
         return value;
+    }
+
+    public trackByFn(index: number, item: number | undefined) {
+        return index;
     }
 }
