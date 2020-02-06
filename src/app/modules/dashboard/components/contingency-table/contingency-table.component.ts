@@ -12,8 +12,8 @@ import { ContingencyTableService } from '../../services';
     styleUrls: ['./contingency-table.component.scss'],
 })
 export class ContingencyTableComponent implements OnInit, OnDestroy {
-    public table: IContingencyTable | undefined = undefined;
     private isDestroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public table: IContingencyTable | undefined = undefined;
 
     public readonly VALUE_TYPE_X = ContingencyTableValueType.x;
     public readonly VALUE_TYPE_Y = ContingencyTableValueType.y;
@@ -35,7 +35,6 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
 
     private init(): void {
         this.contingencyTableService.table$.pipe(takeUntil(this.isDestroyed$)).subscribe(table => {
-            console.log('[table$]', { table });
             this.table = table;
         });
     }

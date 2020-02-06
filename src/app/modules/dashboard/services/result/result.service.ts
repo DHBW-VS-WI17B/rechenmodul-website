@@ -1,25 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { ICalculationResult } from '../../interfaces';
+import { CalculationService } from '../calculation/calculation.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ResultService {
-    private resultSubj: BehaviorSubject<any> = new BehaviorSubject(undefined);
+    constructor(private calculationService: CalculationService) {}
 
-    constructor() {}
-
-    public setResult(result: any): void {
-        this.resultSubj.next(result);
-    }
-
-    public getPoints(): any {
-        const result = this.resultSubj.getValue();
-        return result;
-    }
-
-    public get result$(): Observable<any> {
-        const result = this.resultSubj.asObservable();
-        return result;
+    public get result$(): Observable<ICalculationResult> {
+        return this.calculationService.calculate$;
     }
 }

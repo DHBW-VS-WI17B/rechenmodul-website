@@ -82,7 +82,6 @@ export class PointSequenceComponent implements OnInit {
 
     removeSelectedPoints(): void {
         this.selection.selected.forEach(point => {
-            console.log(point.id);
             this.pointSequenceService.removePointById(point.id);
             this.selection.deselect(point);
         });
