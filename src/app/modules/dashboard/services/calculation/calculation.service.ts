@@ -18,7 +18,10 @@ import { PointsService } from '../points/points.service';
 export class CalculationService {
     constructor(private pointsService: PointsService) {}
 
-    public async calculate(points: IPoint[]): Promise<ICalculationResult> {
+    public async calculate(points: IPoint[]): Promise<ICalculationResult | undefined> {
+        if (points.length < 2) {
+            return undefined;
+        }
         const pointsForCore = this.convertPoints(points);
         const oneDimensionalMean = await calcOneDimensionalMean(pointsForCore);
         const variance = await calcVariance(pointsForCore, oneDimensionalMean);
@@ -36,7 +39,7 @@ export class CalculationService {
         return calculationResult;
     }
 
-    public get calculate$(): Observable<ICalculationResult> {
+    public get calculate$(): Observable<ICalculationResult | undefined> {
         return this.pointsService.points$.pipe(
             switchMap(points => {
                 return this.calculate(points);

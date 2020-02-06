@@ -9,7 +9,7 @@ import { CalculationService } from '../calculation/calculation.service';
 export class ResultService {
     constructor(private calculationService: CalculationService) {}
 
-    public get result$(): Observable<ICalculationResult> {
+    public get result$(): Observable<ICalculationResult | undefined> {
         return this.calculationService.calculate$;
     }
 }

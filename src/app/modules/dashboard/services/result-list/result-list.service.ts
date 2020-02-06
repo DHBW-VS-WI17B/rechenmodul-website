@@ -14,7 +14,10 @@ export class ResultListService {
         return this.resultService.result$.pipe(map(result => this.convertCalculationResultToResultListItems(result)));
     }
 
-    private convertCalculationResultToResultListItems(result: ICalculationResult): IResultListItem[] {
+    private convertCalculationResultToResultListItems(result: ICalculationResult | undefined): IResultListItem[] {
+        if (!result) {
+            return [];
+        }
         const listItems: IResultListItem[] = [];
         listItems.push({ name: 'Eindimensionaler Mittelwert (x)', value: result.oneDimensionalMean.x.toString() });
         listItems.push({ name: 'Eindimensionaler Mittelwert (y)', value: result.oneDimensionalMean.y.toString() });
