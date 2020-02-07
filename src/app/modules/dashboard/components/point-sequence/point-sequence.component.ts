@@ -74,7 +74,9 @@ export class PointSequenceComponent implements OnInit {
         if (this.isAllSelected()) {
             selectAll = true;
         }
-        this.pointSequenceService.addPoint({ x: this.xValueControl.value, y: this.yValueControl.value });
+        const xValue: number = this.xValueControl.value;
+        const yValue: number = this.yValueControl.value;
+        this.pointSequenceService.addPoint({ x: +xValue, y: +yValue });
         if (selectAll) {
             this.selectAllRows();
         }
