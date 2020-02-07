@@ -29,14 +29,16 @@ export class FileImportService {
         const lines = csv.split('\n');
         const pointValues: IPointValue[] = [];
         for (const line of lines) {
-            const values = line.split(',');
+            const values = line.split(';');
             const x = values[0];
             const y = values[1];
-            const pointValue: IPointValue = {
-                x: Number(x),
-                y: Number(y),
-            };
-            pointValues.push(pointValue);
+            if (!isNaN(+x) && !isNaN(+y)) {
+                const pointValue: IPointValue = {
+                    x: Number(x),
+                    y: Number(y),
+                };
+                pointValues.push(pointValue);
+            }
         }
         return pointValues;
     }
