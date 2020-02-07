@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import {
     calcCorrelationCoefficient,
     calcCovariance,
@@ -23,11 +24,12 @@ export class CalculationService {
             return undefined;
         }
         const pointsForCore = this.convertPoints(points);
-        const oneDimensionalMean = await calcOneDimensionalMean(pointsForCore);
-        const variance = await calcVariance(pointsForCore, oneDimensionalMean);
-        const covariance = await calcCovariance(pointsForCore, oneDimensionalMean);
-        const correlationCoefficient = await calcCorrelationCoefficient(pointsForCore, variance, covariance);
+        const oneDimensionalMean = this.roundPoint(await calcOneDimensionalMean(pointsForCore));
+        const variance = this.roundPoint(await calcVariance(pointsForCore, oneDimensionalMean));
+        const covariance = this.roundNumber(await calcCovariance(pointsForCore, oneDimensionalMean));
+        const correlationCoefficient = this.roundNumber(await calcCorrelationCoefficient(pointsForCore, variance, covariance));
         const regressionGraph = await calcRegressionGraph(pointsForCore, variance, covariance, oneDimensionalMean);
+        regressionGraph.quality = this.roundNumber(regressionGraph.quality);
         const calculationResult = <ICalculationResult>{
             correlationCoefficient: correlationCoefficient,
             covariance: covariance,
@@ -37,6 +39,14 @@ export class CalculationService {
             regressionGraph: regressionGraph,
         };
         return calculationResult;
+    }
+
+    private roundNumber(num: number): number {
+        return _.round(num, 2);
+    }
+
+    private roundPoint(point: IPoint_Core): IPoint_Core {
+        return <IPoint_Core>{ x: this.roundNumber(point.x), y: this.roundNumber(point.y) };
     }
 
     public get calculate$(): Observable<ICalculationResult | undefined> {
