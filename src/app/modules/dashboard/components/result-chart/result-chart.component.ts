@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, ChartPoint } from 'chart.js';
+import * as _ from 'lodash';
 import { IPoint, IRegressionGraph } from 'rechenmodul-core/dist';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -16,6 +17,7 @@ export class ResultChartComponent implements OnInit, OnDestroy {
     linePoints: ChartPoint[] = [];
     regressionGraph: IRegressionGraph | undefined;
     chart: Chart | undefined;
+    quality: number | undefined;
 
     constructor(private resultChartService: ResultChartService) {}
 
@@ -34,6 +36,7 @@ export class ResultChartComponent implements OnInit, OnDestroy {
             item.points.forEach(point => {
                 this.scatterPoints.push({ x: point.x, y: point.y });
             });
+            this.quality = _.round(item.regressionGraph.quality, 2);
             this.linePoints = this.getTwoPoints(item.regressionGraph, item.points);
             this.chart = new Chart('canvas', {
                 type: 'scatter',
