@@ -52,6 +52,7 @@ export class ResultChartComponent implements OnInit, OnDestroy {
                             label: 'Regressionsgerade',
                             type: 'line',
                             data: this.linePoints,
+                            fill: false,
                         },
                     ],
                 },
