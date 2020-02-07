@@ -40,13 +40,13 @@ export class ResultChartComponent implements OnInit, OnDestroy {
                 data: {
                     datasets: [
                         {
-                            label: 'Points',
+                            label: 'Punkte',
                             data: this.scatterPoints,
                             pointBackgroundColor: '#ff6384',
                             backgroundColor: '#ff6384',
                         },
                         {
-                            label: 'Line',
+                            label: 'Regressionsgerade',
                             type: 'line',
                             data: this.linePoints,
                         },

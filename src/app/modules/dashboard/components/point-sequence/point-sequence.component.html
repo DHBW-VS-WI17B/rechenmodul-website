@@ -6,13 +6,13 @@
         <form [formGroup]="pointForm">
             <mat-form-field class="inputPointValue">
                 <input matInput
-                       placeholder="X-Value"
+                       placeholder="X-Wert"
                        value=""
                        formControlName="xValueControl">
             </mat-form-field>
             <mat-form-field class="inputPointValue">
                 <input matInput
-                       placeholder="Y-Value"
+                       placeholder="Y-Wert"
                        value=""
                        formControlName="yValueControl">
             </mat-form-field>
@@ -52,14 +52,14 @@
 
             <ng-container matColumnDef="xValue">
                 <th mat-header-cell
-                    *matHeaderCellDef> X-Value </th>
+                    *matHeaderCellDef> X-Wert </th>
                 <td mat-cell
                     *matCellDef="let element"> {{element.value.x}} </td>
             </ng-container>
 
             <ng-container matColumnDef="yValue">
                 <th mat-header-cell
-                    *matHeaderCellDef> Y-Value </th>
+                    *matHeaderCellDef> Y-Wert </th>
                 <td mat-cell
                     *matCellDef="let element"> {{element.value.y}} </td>
             </ng-container>
