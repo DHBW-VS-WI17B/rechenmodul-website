@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Config } from '@app/config';
 import { Chart, ChartPoint } from 'chart.js';
 import { IPoint, IRegressionGraph } from 'rechenmodul-core/dist';
 import { ReplaySubject } from 'rxjs';
@@ -43,14 +44,16 @@ export class ResultChartComponent implements OnInit, OnDestroy {
                         {
                             label: 'Punkte',
                             data: this.scatterPoints,
-                            pointBackgroundColor: '#ff6384',
-                            backgroundColor: '#ff6384',
+                            backgroundColor: Config.THEME_SECONDARY_HEX_COLOR,
+                            borderColor: Config.THEME_SECONDARY_HEX_COLOR,
                         },
                         {
                             label: 'Regressionsgerade',
                             type: 'line',
                             data: this.linePoints,
                             fill: false,
+                            backgroundColor: Config.THEME_PRIMARY_HEX_COLOR,
+                            borderColor: Config.THEME_PRIMARY_HEX_COLOR,
                         },
                     ],
                 },
