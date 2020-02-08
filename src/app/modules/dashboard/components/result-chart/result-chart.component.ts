@@ -18,6 +18,7 @@ export class ResultChartComponent implements OnInit, OnDestroy {
     regressionGraph: IRegressionGraph | undefined;
     chart: Chart | undefined;
     quality: number | undefined;
+    equation: string | undefined = '-';
 
     constructor(private resultChartService: ResultChartService) {}
 
@@ -37,6 +38,15 @@ export class ResultChartComponent implements OnInit, OnDestroy {
                 this.scatterPoints.push({ x: point.x, y: point.y });
             });
             this.quality = _.round(item.regressionGraph.quality, 2);
+            if (item.regressionGraph.xAxisSection != undefined || item.regressionGraph.yAxisSection != undefined) {
+                this.equation =
+                    item.regressionGraph.xAxisSection === undefined
+                        ? `y = ${item.regressionGraph.incline === undefined ? 'm' : _.round(item.regressionGraph.incline, 2)} * x + ${
+                              item.regressionGraph.yAxisSection === undefined ? 'c' : _.round(item.regressionGraph.yAxisSection, 2)
+                          }`
+                        : `x = ${_.round(item.points[0].x, 2)}`;
+            }
+
             this.linePoints = this.getTwoPoints(item.regressionGraph, item.points);
             this.chart = new Chart('canvas', {
                 type: 'scatter',
