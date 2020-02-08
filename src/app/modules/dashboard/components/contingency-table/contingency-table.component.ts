@@ -93,22 +93,22 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
         let placeholder = '';
         switch (valueType) {
             case this.VALUE_TYPE_X:
-                placeholder = `x${index1}`;
+                placeholder = `x${this.toUnicodeSubscript(index1)}`;
                 break;
             case this.VALUE_TYPE_Y:
-                placeholder = `y${index1}`;
+                placeholder = `y${this.toUnicodeSubscript(index1)}`;
                 break;
             case this.VALUE_TYPE_H:
-                placeholder = `h${index1}${index2}`;
+                placeholder = `h${this.toUnicodeSubscript(index1)}${this.toUnicodeSubscript(index2)}`;
                 break;
             case this.VALUE_TYPE_HX:
-                placeholder = `hx${index1}`;
+                placeholder = `h${this.toUnicodeSubscript(index1)}.`;
                 break;
             case this.VALUE_TYPE_HY:
-                placeholder = `h${index1}y`;
+                placeholder = `h.${this.toUnicodeSubscript(index1)}`;
                 break;
             case this.VALUE_TYPE_HXY:
-                placeholder = `hxy`;
+                placeholder = `n`;
                 break;
         }
         return placeholder;
@@ -150,5 +150,49 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
 
     public trackByFn(index: number, item: number | undefined) {
         return index;
+    }
+
+    private toUnicodeSubscript(num: number | undefined): string {
+        if (num === undefined) return '';
+        const numAsString = num.toString();
+        let result = '';
+        [...numAsString].forEach(c => {
+            switch (c) {
+                case '0':
+                    result += '₀';
+                    break;
+                case '1':
+                    result += '₁';
+                    break;
+                case '2':
+                    result += '₂';
+                    break;
+                case '3':
+                    result += '₃';
+                    break;
+                case '4':
+                    result += '₄';
+                    break;
+                case '5':
+                    result += '₅';
+                    break;
+                case '6':
+                    result += '₆';
+                    break;
+                case '7':
+                    result += '₇';
+                    break;
+                case '8':
+                    result += '₈';
+                    break;
+                case '9':
+                    result += '₉';
+                    break;
+
+                default:
+                    break;
+            }
+        });
+        return result;
     }
 }
