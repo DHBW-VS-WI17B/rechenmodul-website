@@ -3,8 +3,6 @@
         <mat-card-title>Schaubild</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <p>Qualität: {{this.quality}}</p>
-        <p>Gleichung: {{this.equation}}</p>
         <div [hidden]="!chart">
             <canvas id="canvas"></canvas>
         </div>

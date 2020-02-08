@@ -30,6 +30,9 @@ export class CalculationService {
         const correlationCoefficient = this.roundNumber(await calcCorrelationCoefficient(pointsForCore, variance, covariance));
         const regressionGraph = await calcRegressionGraph(pointsForCore, variance, covariance, oneDimensionalMean);
         regressionGraph.quality = this.roundNumber(regressionGraph.quality);
+        if (regressionGraph.incline !== undefined) regressionGraph.incline = this.roundNumber(regressionGraph.incline);
+        if (regressionGraph.xAxisSection !== undefined) regressionGraph.xAxisSection = this.roundNumber(regressionGraph.xAxisSection);
+        if (regressionGraph.yAxisSection !== undefined) regressionGraph.yAxisSection = this.roundNumber(regressionGraph.yAxisSection);
         const calculationResult = <ICalculationResult>{
             correlationCoefficient: correlationCoefficient,
             covariance: covariance,
