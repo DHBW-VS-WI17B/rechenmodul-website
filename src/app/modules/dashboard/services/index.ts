@@ -6,3 +6,4 @@ export * from './points/points.service';
 export * from './result-chart/result-chart.service';
 export * from './result-list/result-list.service';
 export * from './result/result.service';
+export * from './validation/validation.service';

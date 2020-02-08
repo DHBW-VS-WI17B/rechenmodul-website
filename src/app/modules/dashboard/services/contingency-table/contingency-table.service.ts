@@ -79,45 +79,41 @@ export class ContingencyTableService {
         return table;
     }
 
-    public updateValueTypeY(currentValue: number | undefined, updatedValue: number | undefined): void {
-        if (currentValue === undefined) {
+    public updateValueTypeY(currentValue: number | undefined | null, updatedValue: number | undefined | null): void {
+        if (_.isNil(currentValue)) {
             return;
         }
-        const points = this.pointsService.getPoints();
-        for (const point of points) {
-            if (point.value.y !== currentValue) {
-                continue;
+        const currentPointValue: IPointValue<number | undefined> = {
+            x: undefined,
+            y: currentValue,
+        };
+        const points = this.pointsService.getPointsByValue(currentPointValue);
+        if (_.isNil(updatedValue)) {
+            this.pointsService.removePoints(points);
+        } else {
+            for (const point of points) {
+                point.value.y = updatedValue;
             }
-            if (updatedValue === undefined) {
-                this.pointsService.removePointById(point.id);
-            } else {
-                const pointValue: IPointValue = {
-                    x: point.value.x,
-                    y: updatedValue,
-                };
-                this.pointsService.updatePointById(point.id, pointValue);
-            }
+            this.pointsService.updatePoints(points);
         }
     }
 
-    public updateValueTypeX(currentValue: number | undefined, updatedValue: number | undefined): void {
-        if (currentValue === undefined) {
+    public updateValueTypeX(currentValue: number | undefined | null, updatedValue: number | undefined | null): void {
+        if (_.isNil(currentValue)) {
             return;
         }
-        const points = this.pointsService.getPoints();
-        for (const point of points) {
-            if (point.value.x !== currentValue) {
-                continue;
+        const currentPointValue: IPointValue<number | undefined> = {
+            x: currentValue,
+            y: undefined,
+        };
+        const points = this.pointsService.getPointsByValue(currentPointValue);
+        if (_.isNil(updatedValue)) {
+            this.pointsService.removePoints(points);
+        } else {
+            for (const point of points) {
+                point.value.x = updatedValue;
             }
-            if (updatedValue === undefined) {
-                this.pointsService.removePointById(point.id);
-            } else {
-                const pointValue: IPointValue = {
-                    x: updatedValue,
-                    y: point.value.y,
-                };
-                this.pointsService.updatePointById(point.id, pointValue);
-            }
+            this.pointsService.updatePoints(points);
         }
     }
 
@@ -142,13 +138,9 @@ export class ContingencyTableService {
             y: y,
         };
         if (currentValue < updatedValue) {
-            _.times(diff, () => {
-                this.pointsService.addPoint(pointValue);
-            });
+            this.pointsService.addPointMultipleTimes(pointValue, diff);
         } else if (currentValue > updatedValue) {
-            _.times(diff, () => {
-                this.pointsService.removePointByValue(pointValue);
-            });
+            this.pointsService.removePointsByValueMultipleTimes(pointValue, diff);
         }
     }
 }

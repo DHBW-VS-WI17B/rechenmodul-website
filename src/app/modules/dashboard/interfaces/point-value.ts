@@ -1,4 +1,4 @@
-export interface IPointValue {
-    x: number;
-    y: number;
+export interface IPointValue<T = number> {
+    x: T;
+    y: T;
 }

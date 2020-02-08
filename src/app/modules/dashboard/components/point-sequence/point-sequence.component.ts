@@ -81,12 +81,12 @@ export class PointSequenceComponent implements OnInit {
 
     public updatePointValueX(element: IPointSequenceElement, updatedValue: number): void {
         element.value.x = updatedValue;
-        this.pointSequenceService.updatePointById(element.id, element.value);
+        this.pointSequenceService.updatePoint(element);
     }
 
     public updatePointValueY(element: IPointSequenceElement, updatedValue: number): void {
         element.value.y = updatedValue;
-        this.pointSequenceService.updatePointById(element.id, element.value);
+        this.pointSequenceService.updatePoint(element);
     }
 
     public getSelectedElements(elements: IPointSequenceElement[]): IPointSequenceElement[] {
@@ -107,9 +107,7 @@ export class PointSequenceComponent implements OnInit {
 
     public removeSelectedPoints(elements: IPointSequenceElement[]): void {
         const selectedElements = this.getSelectedElements(elements);
-        for (const element of selectedElements) {
-            this.pointSequenceService.removePointById(element.id);
-        }
+        this.pointSequenceService.removePoints(selectedElements);
     }
 
     public toggleElementSelection(elements: IPointSequenceElement[], status: boolean): void {

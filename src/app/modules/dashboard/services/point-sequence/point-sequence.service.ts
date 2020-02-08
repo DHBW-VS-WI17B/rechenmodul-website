@@ -15,14 +15,14 @@ export class PointSequenceService {
     }
 
     public addPoint(value: IPointValue): void {
-        this.pointsService.addPoint(value);
+        this.pointsService.addPoints([value]);
     }
 
-    public removePointById(id: number): void {
-        this.pointsService.removePointById(id);
+    public removePoints(points: IPoint[]): void {
+        this.pointsService.removePoints(points);
     }
 
-    public updatePointById(id: number, pointValue: IPointValue): void {
-        this.pointsService.updatePointById(id, pointValue);
+    public updatePoint(point: IPoint): void {
+        this.pointsService.updatePoints([point]);
     }
 }
