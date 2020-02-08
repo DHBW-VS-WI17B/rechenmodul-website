@@ -5,7 +5,6 @@ import { SharedModule } from '@app/shared';
 import {
     ContingencyTableComponent,
     DashboardComponent,
-    EditPointDialogComponent,
     PointSequenceComponent,
     ResultChartComponent,
     ResultListComponent,
@@ -14,14 +13,6 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 
 @NgModule({
     imports: [CommonModule, FormsModule, DashboardRoutingModule, SharedModule, ReactiveFormsModule],
-    declarations: [
-        ContingencyTableComponent,
-        DashboardComponent,
-        PointSequenceComponent,
-        ResultListComponent,
-        ResultChartComponent,
-        EditPointDialogComponent,
-    ],
-    entryComponents: [EditPointDialogComponent],
+    declarations: [ContingencyTableComponent, DashboardComponent, PointSequenceComponent, ResultListComponent, ResultChartComponent],
 })
 export class DashboardModule {}

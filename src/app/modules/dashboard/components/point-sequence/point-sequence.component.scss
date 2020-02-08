@@ -1,11 +1,67 @@
-table {
+mat-card-content {
+    overflow: hidden;
+}
+
+form {
+    display: flex;
+}
+
+form>mat-form-field {
     width: 100%;
+    margin-right: 12px;
 }
 
-.inputPointValue {
-    margin-left: 10px;
+form>button {
+    margin: 12px 0px;
 }
 
-.editBtn {
-    size: 20px;
+.table {
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.table>.header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.row:last-of-type {
+    border-bottom: 0px;
+}
+
+.row:first-of-type {
+    padding: 12px 0px;
+}
+
+.col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 180px;
+    height: 45px;
+    margin: 0px 12px;
+}
+
+.table>.header .col {
+    height: 20px;
+}
+
+.col:first-of-type {
+    width: 20px;
+}
+
+input[type="number"] {
+    border: 0px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
 }

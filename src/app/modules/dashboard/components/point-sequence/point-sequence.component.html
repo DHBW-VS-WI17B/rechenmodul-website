@@ -3,86 +3,65 @@
         <mat-card-title>Punktfolge</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <form [formGroup]="pointForm">
-            <mat-form-field class="inputPointValue">
+        <form>
+            <mat-form-field>
                 <input matInput
+                       type="number"
                        placeholder="X-Wert"
-                       value=""
-                       formControlName="xValueControl">
+                       [(ngModel)]="inputValueX"
+                       [ngModelOptions]="{standalone: true}">
             </mat-form-field>
-            <mat-form-field class="inputPointValue">
+            <mat-form-field>
                 <input matInput
+                       type="number"
                        placeholder="Y-Wert"
-                       value=""
-                       formControlName="yValueControl">
+                       [(ngModel)]="inputValueY"
+                       [ngModelOptions]="{standalone: true}">
             </mat-form-field>
             <button mat-button
-                    (click)=addPoint()
-                    [disabled]="!this.pointForm?.valid">
+                    (click)="addPoint(inputValueX, inputValueY)"
+                    color="primary">
                 <mat-icon>add</mat-icon>
             </button>
         </form>
         <button mat-button
-                (click)=removeSelectedPoints()
-                [disabled]="!selection.hasValue()">
+                (click)="removeSelectedPoints(elements); globalSelectStatus = false"
+                [disabled]="getSelectedElements(elements).length < 1">
             <mat-icon>delete</mat-icon>
         </button>
 
-        <table mat-table
-               [dataSource]="dataSource">
-
-            <ng-container matColumnDef="select">
-                <th mat-header-cell
-                    *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggle() : null"
-                                  [checked]="selection.hasValue() && isAllSelected()"
-                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                  [aria-label]="checkboxLabel()">
-                    </mat-checkbox>
-                </th>
-                <td mat-cell
-                    *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                                  (change)="$event ? selection.toggle(row) : null"
-                                  [checked]="selection.isSelected(row)"
-                                  [aria-label]="checkboxLabel(row)">
-                    </mat-checkbox>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="xValue">
-                <th mat-header-cell
-                    *matHeaderCellDef> X-Wert </th>
-                <td mat-cell
-                    *matCellDef="let element"> {{element.value.x}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="yValue">
-                <th mat-header-cell
-                    *matHeaderCellDef> Y-Wert </th>
-                <td mat-cell
-                    *matCellDef="let element"> {{element.value.y}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="actions">
-                <th mat-header-cell
-                    *matHeaderCellDef></th>
-                <td mat-cell
-                    *matCellDef="let element">
-                    <button mat-button
-                            editBtn
-                            (click)="editPoint($event, element)">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                </td>
-            </ng-container>
-
-            <tr mat-header-row
-                *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row
-                *matRowDef="let row; columns: displayedColumns;"
-                (click)="selection.toggle(row)">
-            </tr>
-        </table>
+        <div class="table">
+            <div class="header row">
+                <div class="col">
+                    <mat-checkbox [ngModel]="globalSelectStatus"
+                                  (ngModelChange)="masterToggle($event)"></mat-checkbox>
+                </div>
+                <div class="col">
+                    X-Wert
+                </div>
+                <div class="col">
+                    Y-Wert
+                </div>
+            </div>
+            <div class="row"
+                 *ngFor="let element of elements; trackBy: trackByFn">
+                <div class="col">
+                    <mat-checkbox [ngModel]="element.isSelected"
+                                  (ngModelChange)="element.isSelected = $event; toggleElementSelection(elements, $event)"></mat-checkbox>
+                </div>
+                <div class="col">
+                    <input type="number"
+                           [ngModel]="element.value.x"
+                           (ngModelChange)="updatePointValueX(element, $event)"
+                           placeholder="X-Wert">
+                </div>
+                <div class="col">
+                    <input type="number"
+                           [ngModel]="element.value.y"
+                           (ngModelChange)="updatePointValueY(element, $event)"
+                           placeholder="Y-Wert">
+                </div>
+            </div>
+        </div>
     </mat-card-content>
 </mat-card>

@@ -1,11 +1,12 @@
-import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
-import { MatTableDataSource } from '@angular/material/table';
+import { FormGroup } from '@angular/forms';
+import * as _ from 'lodash';
 import { IPoint } from '../../interfaces';
 import { PointSequenceService } from '../../services';
-import { EditPointDialogComponent } from '../edit-point-dialog/edit-point-dialog.component';
+
+interface IPointSequenceElement extends IPoint {
+    isSelected: boolean;
+}
 
 @Component({
     selector: 'app-point-sequence',
@@ -13,93 +14,114 @@ import { EditPointDialogComponent } from '../edit-point-dialog/edit-point-dialog
     styleUrls: ['./point-sequence.component.scss'],
 })
 export class PointSequenceComponent implements OnInit {
-    constructor(private pointSequenceService: PointSequenceService, public dialog: MatDialog) {}
+    constructor(private pointSequenceService: PointSequenceService) {}
 
-    private points: IPoint[] = [];
-    private xValueControl: FormControl | undefined;
-    private yValueControl: FormControl | undefined;
+    public elements: IPointSequenceElement[] = [];
+    public globalSelectStatus: boolean = false;
+    public inputValueX: number | undefined;
+    public inputValueY: number | undefined;
 
     public pointForm: FormGroup | undefined;
-    public displayedColumns: string[] = ['select', 'xValue', 'yValue', 'actions'];
-    public dataSource = new MatTableDataSource<IPoint>(this.points);
-    public selection = new SelectionModel<IPoint>(true, []);
+
+    public test: any;
 
     ngOnInit(): void {
-        this.pointSequenceService.points$.subscribe((data: IPoint[]) => {
-            this.dataSource.data = data;
-        });
-        this.xValueControl = new FormControl('', [
-            Validators.required,
-            Validators.pattern('^-?[0-9]\\d*(\\.\\d+)?$'),
-            Validators.minLength(1),
-        ]);
-        this.yValueControl = new FormControl('', [
-            Validators.required,
-            Validators.pattern('^-?[0-9]\\d*(\\.\\d+)?$'),
-            Validators.minLength(1),
-        ]);
-        this.pointForm = new FormGroup({
-            xValueControl: this.xValueControl,
-            yValueControl: this.yValueControl,
+        this.pointSequenceService.points$.subscribe(points => {
+            this.elements = this.convertPointsToPointSequenceElements(points, this.elements, this.globalSelectStatus);
         });
     }
 
-    isAllSelected(): boolean {
-        const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource.data.length;
-        return numSelected === numRows && this.dataSource.data.length !== 0;
-    }
-
-    masterToggle(): void {
-        this.isAllSelected() ? this.selection.clear() : this.selectAllRows();
-    }
-
-    selectAllRows(): void {
-        this.dataSource.data.forEach(row => this.selection.select(row));
-    }
-
-    /** The label for the checkbox on the passed row */
-    checkboxLabel(row?: IPoint): string {
-        if (!row) {
-            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    public convertPointsToPointSequenceElements(
+        points: IPoint[],
+        existingElements: IPointSequenceElement[],
+        globalSelectStatus: boolean,
+    ): IPointSequenceElement[] {
+        const elements: IPointSequenceElement[] = [];
+        for (const point of points) {
+            const element: IPointSequenceElement = {
+                id: point.id,
+                value: {
+                    x: point.value.x,
+                    y: point.value.y,
+                },
+                isSelected: false,
+            };
+            const existingElement = _.find(existingElements, _existingElement => {
+                return _existingElement.id === element.id;
+            });
+            if (existingElement) {
+                element.isSelected = existingElement.isSelected;
+            } else {
+                element.isSelected = globalSelectStatus === true;
+            }
+            elements.push(element);
         }
-        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+        return elements;
     }
 
-    addPoint(): void {
-        if (!this.pointForm || !this.xValueControl || !this.yValueControl || !this.pointForm.valid) {
+    public masterToggle(status: boolean): void {
+        status === true ? this.selectAllElements() : this.unselectAllElements();
+        this.globalSelectStatus = status;
+    }
+
+    private selectAllElements(): void {
+        this.elements.forEach(element => (element.isSelected = true));
+    }
+
+    private unselectAllElements(): void {
+        this.elements.forEach(element => (element.isSelected = false));
+    }
+
+    public addPoint(x: number | undefined, y: number | undefined): void {
+        if (x === undefined || y === undefined) {
             return;
         }
-        let selectAll = false;
-        if (this.isAllSelected()) {
-            selectAll = true;
-        }
-        const xValue: number = this.xValueControl.value;
-        const yValue: number = this.yValueControl.value;
-        this.pointSequenceService.addPoint({ x: +xValue, y: +yValue });
-        if (selectAll) {
-            this.selectAllRows();
-        }
+        this.pointSequenceService.addPoint({ x: x, y: y });
     }
 
-    removeSelectedPoints(): void {
-        this.selection.selected.forEach(point => {
-            this.pointSequenceService.removePointById(point.id);
-            this.selection.deselect(point);
-        });
+    public updatePointValueX(element: IPointSequenceElement, updatedValue: number): void {
+        element.value.x = updatedValue;
+        this.pointSequenceService.updatePointById(element.id, element.value);
     }
 
-    editPoint(event: any, point: IPoint): void {
-        event.stopPropagation();
-        const dialogRef = this.dialog.open(EditPointDialogComponent, {
-            width: '450px',
-            data: point.value,
-        });
+    public updatePointValueY(element: IPointSequenceElement, updatedValue: number): void {
+        element.value.y = updatedValue;
+        this.pointSequenceService.updatePointById(element.id, element.value);
+    }
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.pointSequenceService.updatePointById(point.id, result);
+    public getSelectedElements(elements: IPointSequenceElement[]): IPointSequenceElement[] {
+        const selectedElements: IPointSequenceElement[] = [];
+        for (const element of elements) {
+            if (!element.isSelected) {
+                continue;
             }
-        });
+            selectedElements.push(element);
+        }
+        return selectedElements;
+    }
+
+    private areAllElementsSelected(elements: IPointSequenceElement[]): boolean {
+        const selectedElements = this.getSelectedElements(elements);
+        return selectedElements.length === elements.length;
+    }
+
+    public removeSelectedPoints(elements: IPointSequenceElement[]): void {
+        const selectedElements = this.getSelectedElements(elements);
+        for (const element of selectedElements) {
+            this.pointSequenceService.removePointById(element.id);
+        }
+    }
+
+    public toggleElementSelection(elements: IPointSequenceElement[], status: boolean): void {
+        if (status === false) {
+            this.globalSelectStatus = false;
+        } else {
+            const areAllElementsSelected = this.areAllElementsSelected(elements);
+            this.globalSelectStatus = areAllElementsSelected;
+        }
+    }
+
+    public trackByFn(index: number, item: IPoint) {
+        return item.id;
     }
 }
