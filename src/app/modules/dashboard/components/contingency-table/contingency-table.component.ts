@@ -63,31 +63,35 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
         return value;
     }
 
-    public updateValueFor(valueType: ContingencyTableValueType, updatedValue: number, index1: number, index2: number | undefined): void {
+    public updateValueFor(
+        valueType: ContingencyTableValueType,
+        updatedValue: number | undefined | null,
+        index1: number,
+        index2: number | undefined,
+    ): void {
         if (this.table === undefined) {
             return;
         }
+        if (updatedValue === null) {
+            updatedValue = undefined;
+        }
+        const currentValue = this.getValueFor(valueType, index1, index2);
         switch (valueType) {
-            case this.VALUE_TYPE_X: {
-                const currentValue = this.table.x[index1];
+            case this.VALUE_TYPE_X:
                 this.table.x[index1] = updatedValue;
                 this.contingencyTableService.updateValueTypeX(currentValue, updatedValue);
                 break;
-            }
-            case this.VALUE_TYPE_Y: {
-                const currentValue = this.table.y[index1];
+            case this.VALUE_TYPE_Y:
                 this.table.y[index1] = updatedValue;
                 this.contingencyTableService.updateValueTypeY(currentValue, updatedValue);
                 break;
-            }
-            case this.VALUE_TYPE_H: {
+            case this.VALUE_TYPE_H:
                 if (this.table.h[index1] === undefined || index2 === undefined) {
                     break;
                 }
-                const currentValue = this.table.h[index1][index2];
+                this.table.h[index1][index2] = updatedValue;
                 this.contingencyTableService.updateValueTypeH(this.table.x[index1], this.table.y[index2], currentValue, updatedValue);
                 break;
-            }
         }
     }
 

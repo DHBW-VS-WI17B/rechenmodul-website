@@ -122,13 +122,13 @@ export class PointsService {
     private validatePoints(points: IPoint[]): boolean {
         this.logService.log(LogLevel.debug, this.TAG, 'Validate points.', []);
         // Validate sample size
-        if (points.length > 100) {
+        if (points.length > Config.MAX_SAMPLE_SIZE) {
             this.logService.log(LogLevel.warn, this.TAG, 'Sample size too large.', [points.length]);
             return false;
         }
         // Validate number of different point values
         const numberOfDifferentPointValues = this.getNumberOfDifferentPointValues(points);
-        if (numberOfDifferentPointValues > 30) {
+        if (numberOfDifferentPointValues > Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES) {
             this.logService.log(LogLevel.warn, this.TAG, 'Number of different point values too large.', [numberOfDifferentPointValues]);
             return false;
         }

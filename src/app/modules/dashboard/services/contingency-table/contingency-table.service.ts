@@ -56,12 +56,15 @@ export class ContingencyTableService {
     }
 
     private fillEmptyCells(table: IContingencyTable): IContingencyTable {
-        for (let i = 0; i < Config.CONTINGENCY_TABLE_MAX_ROWS; i++) {
+        const maxDifferentValues = Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES;
+        const maxRowLength = table.x.length + 1 > maxDifferentValues ? maxDifferentValues : table.x.length + 1;
+        const maxColumnLength = table.y.length + 1 > maxDifferentValues ? maxDifferentValues : table.y.length + 1;
+        for (let i = 0; i < maxRowLength; i++) {
             const rowHasValue = table.x[i] === undefined ? false : true;
             if (!rowHasValue) {
                 table.x[i] = undefined;
             }
-            for (let j = 0; j < Config.CONTINGENCY_TABLE_MAX_COLUMNS; j++) {
+            for (let j = 0; j < maxColumnLength; j++) {
                 const columnHasValue = table.y[j] === undefined ? false : true;
                 if (!columnHasValue) {
                     table.y[j] = undefined;
@@ -79,8 +82,8 @@ export class ContingencyTableService {
         return table;
     }
 
-    public updateValueTypeY(currentValue: number | undefined | null, updatedValue: number | undefined | null): void {
-        if (_.isNil(currentValue)) {
+    public updateValueTypeY(currentValue: number | undefined, updatedValue: number | undefined): void {
+        if (currentValue === undefined) {
             return;
         }
         const currentPointValue: IPointValue<number | undefined> = {
@@ -88,7 +91,7 @@ export class ContingencyTableService {
             y: currentValue,
         };
         const points = this.pointsService.getPointsByValue(currentPointValue);
-        if (_.isNil(updatedValue)) {
+        if (updatedValue === undefined) {
             this.pointsService.removePoints(points);
         } else {
             for (const point of points) {
@@ -98,8 +101,8 @@ export class ContingencyTableService {
         }
     }
 
-    public updateValueTypeX(currentValue: number | undefined | null, updatedValue: number | undefined | null): void {
-        if (_.isNil(currentValue)) {
+    public updateValueTypeX(currentValue: number | undefined, updatedValue: number | undefined): void {
+        if (currentValue === undefined) {
             return;
         }
         const currentPointValue: IPointValue<number | undefined> = {
@@ -107,7 +110,7 @@ export class ContingencyTableService {
             y: undefined,
         };
         const points = this.pointsService.getPointsByValue(currentPointValue);
-        if (_.isNil(updatedValue)) {
+        if (updatedValue === undefined) {
             this.pointsService.removePoints(points);
         } else {
             for (const point of points) {
