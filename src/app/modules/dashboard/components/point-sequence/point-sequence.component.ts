@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { IPoint } from '../../interfaces';
 import { PointSequenceService } from '../../services';
 
@@ -12,9 +14,10 @@ interface IPointSequenceElement extends IPoint {
     selector: 'app-point-sequence',
     templateUrl: './point-sequence.component.html',
     styleUrls: ['./point-sequence.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PointSequenceComponent implements OnInit {
-    constructor(private pointSequenceService: PointSequenceService) {}
+export class PointSequenceComponent implements OnInit, OnDestroy {
+    private isDestroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     public elements: IPointSequenceElement[] = [];
     public globalSelectStatus: boolean = false;
@@ -23,12 +26,18 @@ export class PointSequenceComponent implements OnInit {
 
     public pointForm: FormGroup | undefined;
 
-    public test: any;
+    constructor(private pointSequenceService: PointSequenceService, private changeDetection: ChangeDetectorRef) {}
 
     ngOnInit(): void {
-        this.pointSequenceService.points$.subscribe(points => {
+        this.pointSequenceService.points$.pipe(takeUntil(this.isDestroyed$)).subscribe(points => {
             this.elements = this.convertPointsToPointSequenceElements(points, this.elements, this.globalSelectStatus);
+            this.changeDetection.markForCheck();
         });
+    }
+
+    ngOnDestroy() {
+        this.isDestroyed$.next(true);
+        this.isDestroyed$.complete();
     }
 
     public convertPointsToPointSequenceElements(

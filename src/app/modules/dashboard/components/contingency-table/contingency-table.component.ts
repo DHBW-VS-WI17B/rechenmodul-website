@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { ContingencyTableService } from '../../services';
     selector: 'app-contingency-table',
     templateUrl: './contingency-table.component.html',
     styleUrls: ['./contingency-table.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContingencyTableComponent implements OnInit, OnDestroy {
     private isDestroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -22,7 +23,7 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
     public readonly VALUE_TYPE_HY = ContingencyTableValueType.hy;
     public readonly VALUE_TYPE_HXY = ContingencyTableValueType.hxy;
 
-    constructor(private contingencyTableService: ContingencyTableService) {}
+    constructor(private contingencyTableService: ContingencyTableService, private changeDetection: ChangeDetectorRef) {}
 
     ngOnInit() {
         this.init();
@@ -36,6 +37,7 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
     private init(): void {
         this.contingencyTableService.table$.pipe(takeUntil(this.isDestroyed$)).subscribe(table => {
             this.table = table;
+            this.changeDetection.markForCheck();
         });
     }
 

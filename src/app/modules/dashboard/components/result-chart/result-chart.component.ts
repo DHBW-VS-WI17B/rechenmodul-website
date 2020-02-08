@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, ChartPoint } from 'chart.js';
 import { IPoint, IRegressionGraph } from 'rechenmodul-core/dist';
 import { ReplaySubject } from 'rxjs';
@@ -9,6 +9,7 @@ import { ResultChartService } from '../../services';
     selector: 'app-result-chart',
     templateUrl: './result-chart.component.html',
     styleUrls: ['./result-chart.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResultChartComponent implements OnInit, OnDestroy {
     private isDestroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -17,7 +18,7 @@ export class ResultChartComponent implements OnInit, OnDestroy {
     regressionGraph: IRegressionGraph | undefined;
     chart: Chart | undefined;
 
-    constructor(private resultChartService: ResultChartService) {}
+    constructor(private resultChartService: ResultChartService, private changeDetection: ChangeDetectorRef) {}
 
     ngOnInit() {
         this.init();
@@ -63,6 +64,7 @@ export class ResultChartComponent implements OnInit, OnDestroy {
                     },
                 },
             });
+            this.changeDetection.markForCheck();
         });
     }
 
