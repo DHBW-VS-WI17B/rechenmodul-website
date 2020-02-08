@@ -26,6 +26,12 @@ export class PointsService {
         this.pointsSubj.next(points);
     }
 
+    public reset(): void {
+        this.logService.log(LogLevel.debug, this.TAG, 'RESET.', []);
+        this.setPoints([]);
+        this.nextPointId = 0;
+    }
+
     public addPointMultipleTimes(pointValue: IPointValue, times: number): void {
         const pointValues: IPointValue[] = [];
         for (let i = 0; i < times; i++) {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { FileImportService } from '../../services';
+import { FileImportService, PointsService } from '../../services';
 
 @Component({
     selector: 'app-dashboard',
@@ -8,7 +8,7 @@ import { FileImportService } from '../../services';
     styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-    constructor(private fileImportService: FileImportService) {}
+    constructor(private fileImportService: FileImportService, private pointsService: PointsService) {}
 
     ngOnInit() {}
 
@@ -31,5 +31,9 @@ export class DashboardComponent implements OnInit {
             return;
         }
         this.fileImportService.importFile(file);
+    }
+
+    public reset(): void {
+        this.pointsService.reset();
     }
 }

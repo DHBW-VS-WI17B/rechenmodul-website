@@ -44,7 +44,7 @@ export class FileImportService {
     }
 
     private setPoints(pointValues: IPointValue[]): void {
-        this.pointsService.setPoints([]);
+        this.pointsService.reset();
         this.pointsService.addPoints(pointValues);
     }
 }
