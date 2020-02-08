@@ -19,12 +19,16 @@ form>button {
     display: flex;
     flex-direction: column;
     margin-top: 12px;
-    max-height: 300px;
-    overflow-y: scroll;
 }
 
 .table>.header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 12px 0px;
+}
+
+.table>.body {
+    max-height: 300px;
+    overflow-y: scroll;
 }
 
 .row {
@@ -35,10 +39,6 @@ form>button {
 
 .row:last-of-type {
     border-bottom: 0px;
-}
-
-.row:first-of-type {
-    padding: 12px 0px;
 }
 
 .col {

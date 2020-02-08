@@ -43,23 +43,26 @@
                     Y-Wert
                 </div>
             </div>
-            <div class="row"
-                 *ngFor="let element of elements; trackBy: trackByFn">
-                <div class="col">
-                    <mat-checkbox [ngModel]="element.isSelected"
-                                  (ngModelChange)="element.isSelected = $event; toggleElementSelection(elements, $event)"></mat-checkbox>
-                </div>
-                <div class="col">
-                    <input type="number"
-                           [ngModel]="element.value.x"
-                           (ngModelChange)="updatePointValueX(element, $event)"
-                           placeholder="X-Wert">
-                </div>
-                <div class="col">
-                    <input type="number"
-                           [ngModel]="element.value.y"
-                           (ngModelChange)="updatePointValueY(element, $event)"
-                           placeholder="Y-Wert">
+            <div class="body">
+                <div class="row"
+                     *ngFor="let element of elements; trackBy: trackByFn">
+                    <div class="col">
+                        <mat-checkbox [ngModel]="element.isSelected"
+                                      (ngModelChange)="element.isSelected = $event; toggleElementSelection(elements, $event)">
+                        </mat-checkbox>
+                    </div>
+                    <div class="col">
+                        <input type="number"
+                               [ngModel]="element.value.x"
+                               (ngModelChange)="updatePointValueX(element, $event)"
+                               placeholder="X-Wert">
+                    </div>
+                    <div class="col">
+                        <input type="number"
+                               [ngModel]="element.value.y"
+                               (ngModelChange)="updatePointValueY(element, $event)"
+                               placeholder="Y-Wert">
+                    </div>
                 </div>
             </div>
         </div>
