@@ -2,9 +2,9 @@ import { IPoint, IRegressionGraph } from 'rechenmodul-core';
 
 export interface ICalculationResult {
     oneDimensionalMean: IPoint;
-    variance: IPoint;
-    covariance: number;
-    correlationCoefficient: number;
-    regressionGraph: IRegressionGraph;
+    variance: IPoint | undefined;
+    covariance: number | undefined;
+    correlationCoefficient: number | undefined;
+    regressionGraph: IRegressionGraph | undefined;
     points: IPoint[];
 }

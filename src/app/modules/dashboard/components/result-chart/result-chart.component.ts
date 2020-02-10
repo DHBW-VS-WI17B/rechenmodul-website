@@ -34,7 +34,7 @@ export class ResultChartComponent implements OnInit, OnDestroy {
             const scatterPoints = _.map(item.points, point => {
                 return { x: point.x, y: point.y };
             });
-            const linePoints = this.getTwoPoints(item.regressionGraph, item.points);
+            const linePoints = item.regressionGraph === undefined ? [] : this.getTwoPoints(item.regressionGraph, item.points);
             this.updateChart(scatterPoints, linePoints);
             this.changeDetection.markForCheck();
         });

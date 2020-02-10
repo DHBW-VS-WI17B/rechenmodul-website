@@ -29,7 +29,7 @@ export class ResultChartService {
         } else {
             const resultGraphItem: IResultGraphItem = {
                 points: result.points,
-                regressionGraph: result.regressionGraph,
+                regressionGraph: result.regressionGraph || undefined,
             };
             return resultGraphItem;
         }

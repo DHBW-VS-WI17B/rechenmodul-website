@@ -20,27 +20,34 @@ export class CalculationService {
     constructor(private pointsService: PointsService) {}
 
     public async calculate(points: IPoint[]): Promise<ICalculationResult | undefined> {
-        if (points.length < 2) {
+        if (points.length < 1) {
             return undefined;
         }
         const pointsForCore = this.convertPoints(points);
-        const oneDimensionalMean = this.roundPoint(await calcOneDimensionalMean(pointsForCore));
-        const variance = this.roundPoint(await calcVariance(pointsForCore, oneDimensionalMean));
-        const covariance = this.roundNumber(await calcCovariance(pointsForCore, oneDimensionalMean));
-        const correlationCoefficient = this.roundNumber(await calcCorrelationCoefficient(pointsForCore, variance, covariance));
-        const regressionGraph = await calcRegressionGraph(pointsForCore, variance, covariance, oneDimensionalMean);
-        regressionGraph.quality = this.roundNumber(regressionGraph.quality);
-        if (regressionGraph.incline !== undefined) regressionGraph.incline = this.roundNumber(regressionGraph.incline);
-        if (regressionGraph.xAxisSection !== undefined) regressionGraph.xAxisSection = this.roundNumber(regressionGraph.xAxisSection);
-        if (regressionGraph.yAxisSection !== undefined) regressionGraph.yAxisSection = this.roundNumber(regressionGraph.yAxisSection);
-        const calculationResult = <ICalculationResult>{
-            correlationCoefficient: correlationCoefficient,
-            covariance: covariance,
-            variance: variance,
-            oneDimensionalMean: oneDimensionalMean,
+        const oneDimensionalMean = await calcOneDimensionalMean(pointsForCore);
+        const calculationResult: ICalculationResult = {
+            correlationCoefficient: undefined,
+            covariance: undefined,
+            variance: undefined,
+            oneDimensionalMean: this.roundPoint(oneDimensionalMean),
             points: pointsForCore,
-            regressionGraph: regressionGraph,
+            regressionGraph: undefined,
         };
+        if (points.length > 1) {
+            const variance = await calcVariance(pointsForCore, oneDimensionalMean);
+            const covariance = await calcCovariance(pointsForCore, oneDimensionalMean);
+            const correlationCoefficient = await calcCorrelationCoefficient(pointsForCore, variance, covariance);
+            const regressionGraph = await calcRegressionGraph(pointsForCore, variance, covariance, oneDimensionalMean);
+            calculationResult.variance = this.roundPoint(variance);
+            calculationResult.covariance = this.roundNumber(covariance);
+            calculationResult.correlationCoefficient = this.roundNumber(correlationCoefficient);
+            calculationResult.regressionGraph = {
+                quality: this.roundNumber(regressionGraph.quality),
+                incline: regressionGraph.incline === undefined ? undefined : this.roundNumber(regressionGraph.incline),
+                xAxisSection: regressionGraph.xAxisSection === undefined ? undefined : this.roundNumber(regressionGraph.xAxisSection),
+                yAxisSection: regressionGraph.yAxisSection === undefined ? undefined : this.roundNumber(regressionGraph.yAxisSection),
+            };
+        }
         return calculationResult;
     }
 
