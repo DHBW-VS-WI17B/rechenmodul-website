@@ -35,7 +35,10 @@ export class ResultListService {
             listItems.push({ name: 'Korrelationskoeffizient', value: result.correlationCoefficient });
         }
         if (result.regressionGraph !== undefined) {
-            listItems.push({ name: 'Qualität der Regressionsgerade (Bestimmtheitsmaß)', value: result.regressionGraph.quality });
+            listItems.push({
+                name: 'Qualität der Regressionsgerade (Bestimmtheitsmaß)',
+                value: `${this.getQualityInWords(result.regressionGraph.quality)} (${result.regressionGraph.quality})`,
+            });
             listItems.push({ name: 'Gleichung der Regressionsgerade', value: this.getRegressionGraphEquation(result.regressionGraph) });
         }
         return listItems;
@@ -52,6 +55,22 @@ export class ResultListService {
             }
         }
         return '-';
+    }
+
+    private getQualityInWords(quality: number): string {
+        if (quality >= 0 && quality < 0.5) {
+            return 'Ungenügende Qualität';
+        }
+        if (quality >= 0.5 && quality < 0.7) {
+            return 'Mäßige Qualität';
+        }
+        if (quality >= 0.7 && quality < 0.9) {
+            return 'Gute Qualität';
+        }
+        if (quality >= 0.9 && quality <= 1) {
+            return 'Ausgezeichnete Qualität';
+        }
+        return '';
     }
 
     private formatNumber(value: number): string {
