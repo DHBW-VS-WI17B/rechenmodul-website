@@ -25,4 +25,8 @@ export class PointSequenceService {
     public updatePoint(point: IPoint): void {
         this.pointsService.updatePoints([point]);
     }
+
+    public getNumberOfDifferentPointValues(points: IPoint[]): number {
+        return this.pointsService.getNumberOfDifferentPointValues(points);
+    }
 }

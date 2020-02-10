@@ -149,7 +149,7 @@ export class PointsService {
         return true;
     }
 
-    private getNumberOfDifferentPointValues(points: IPoint[]): number {
+    public getNumberOfDifferentPointValues(points: IPoint[]): number {
         const differentPointValues: IPointValue[] = [];
         for (const point of points) {
             const index = _.findIndex(differentPointValues, pointValue => {

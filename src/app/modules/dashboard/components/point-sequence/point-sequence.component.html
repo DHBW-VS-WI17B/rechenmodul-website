@@ -21,6 +21,8 @@
                        [ngModelOptions]="{standalone: true}">
             </mat-form-field>
             <button mat-button
+                    type="submit"
+                    [disabled]=isSubmitButtonDisabled()
                     (click)="addPoint(inputValueX, inputValueY)"
                     color="primary">
                 <mat-icon>add</mat-icon>

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Config } from '@app/config';
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -66,6 +67,23 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
             elements.push(element);
         }
         return elements;
+    }
+
+    public isSubmitButtonDisabled(): boolean {
+        if (!this.inputValueX || !this.inputValueY) {
+            return true;
+        }
+        const numberOfDifferentPointValues = this.pointSequenceService.getNumberOfDifferentPointValues(this.elements);
+        const pointValueAlreadyExists = _.find(
+            this.elements,
+            element => element.value.x === this.inputValueX && element.value.y === this.inputValueY,
+        );
+        if (numberOfDifferentPointValues < Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES && this.elements.length < Config.MAX_SAMPLE_SIZE) {
+            return false;
+        } else if (!!pointValueAlreadyExists && this.elements.length < Config.MAX_SAMPLE_SIZE) {
+            return false;
+        }
+        return true;
     }
 
     public masterToggle(status: boolean): void {
