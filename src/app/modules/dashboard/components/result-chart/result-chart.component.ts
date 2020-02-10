@@ -78,6 +78,13 @@ export class ResultChartComponent implements OnInit, OnDestroy {
         if (!this.chart || !this.chart.data.datasets || this.chart.data.datasets.length < 2) {
             return;
         }
+
+        if (linePoints.every((val, _i, arr) => val.x === arr[0].x)) {
+            this.chart.data.datasets[1].hidden = true;
+        } else {
+            this.chart.data.datasets[1].hidden = false;
+        }
+
         this.chart.data.datasets[0].data = scatterPoints;
         this.chart.data.datasets[1].data = linePoints;
         this.chart.update();
