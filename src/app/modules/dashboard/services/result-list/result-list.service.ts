@@ -37,7 +37,7 @@ export class ResultListService {
         if (result.regressionGraph !== undefined) {
             listItems.push({
                 name: 'Qualität der Regressionsgerade (Bestimmtheitsmaß)',
-                value: `${this.getQualityInWords(result.regressionGraph.quality)} (${result.regressionGraph.quality})`,
+                value: `${this.getQualityInWords(result.regressionGraph.quality)} (${this.formatNumber(result.regressionGraph.quality)})`,
             });
             listItems.push({ name: 'Gleichung der Regressionsgerade', value: this.getRegressionGraphEquation(result.regressionGraph) });
         }
