@@ -31,16 +31,21 @@ export class ResultListService {
         if (result.covariance !== undefined) {
             listItems.push({ name: 'Kovarianz', value: result.covariance });
         }
-        if (result.correlationCoefficient !== undefined) {
-            listItems.push({ name: 'Korrelationskoeffizient', value: result.correlationCoefficient });
+        if (!result.points.every((val, _i, arr) => val.x == arr[0].x && val.y == arr[0].y)) {
+            if (result.correlationCoefficient !== undefined) {
+                listItems.push({ name: 'Korrelationskoeffizient', value: result.correlationCoefficient });
+            }
+            if (result.regressionGraph !== undefined) {
+                listItems.push({
+                    name: 'Qualität der Regressionsgerade (Bestimmtheitsmaß)',
+                    value: `${this.getQualityInWords(result.regressionGraph.quality)} (${this.formatNumber(
+                        result.regressionGraph.quality,
+                    )})`,
+                });
+                listItems.push({ name: 'Gleichung der Regressionsgerade', value: this.getRegressionGraphEquation(result.regressionGraph) });
+            }
         }
-        if (result.regressionGraph !== undefined) {
-            listItems.push({
-                name: 'Qualität der Regressionsgerade (Bestimmtheitsmaß)',
-                value: `${this.getQualityInWords(result.regressionGraph.quality)} (${this.formatNumber(result.regressionGraph.quality)})`,
-            });
-            listItems.push({ name: 'Gleichung der Regressionsgerade', value: this.getRegressionGraphEquation(result.regressionGraph) });
-        }
+
         return listItems;
     }
 
