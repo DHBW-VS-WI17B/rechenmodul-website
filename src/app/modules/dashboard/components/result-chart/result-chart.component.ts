@@ -66,6 +66,19 @@ export class ResultChartComponent implements OnInit, OnDestroy {
                     yAxes: [
                         {
                             stacked: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'y',
+                            },
+                        },
+                    ],
+                    xAxes: [
+                        {
+                            stacked: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'x',
+                            },
                         },
                     ],
                 },
