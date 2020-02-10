@@ -163,8 +163,8 @@ export class PointsService {
     }
 
     private validatePointValue(pointValue: IPointValue): boolean {
-        const xIsValid = this.validatePointValueNumber(pointValue.x);
-        const yIsValid = this.validatePointValueNumber(pointValue.y);
+        const xIsValid = this.validatePointValueNumber(pointValue.x) && Math.abs(pointValue.x) <= Number.MAX_SAFE_INTEGER;
+        const yIsValid = this.validatePointValueNumber(pointValue.y) && Math.abs(pointValue.y) <= Number.MAX_SAFE_INTEGER;
         return xIsValid && yIsValid;
     }
 
