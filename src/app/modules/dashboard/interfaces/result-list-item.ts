@@ -1,4 +1,4 @@
 export interface IResultListItem {
     name: string;
-    value: string;
+    value: string | number;
 }

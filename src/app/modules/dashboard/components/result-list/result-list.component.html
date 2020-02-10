@@ -16,7 +16,7 @@
                 <th mat-header-cell
                     *matHeaderCellDef>Wert</th>
                 <td mat-cell
-                    *matCellDef="let element"> {{element.value}} </td>
+                    *matCellDef="let element"> {{isNumber(element.value) ? (element.value | number) : element.value}} </td>
             </ng-container>
 
             <tr mat-header-row

@@ -1,4 +1,6 @@
+import { formatNumber } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { Config } from '@app/config';
 import { IRegressionGraph } from 'rechenmodul-core/dist';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -20,20 +22,20 @@ export class ResultListService {
             return [];
         }
         const listItems: IResultListItem[] = [];
-        listItems.push({ name: 'Eindimensionaler Mittelwert (x)', value: result.oneDimensionalMean.x.toString() });
-        listItems.push({ name: 'Eindimensionaler Mittelwert (y)', value: result.oneDimensionalMean.y.toString() });
+        listItems.push({ name: 'Eindimensionaler Mittelwert (x)', value: result.oneDimensionalMean.x });
+        listItems.push({ name: 'Eindimensionaler Mittelwert (y)', value: result.oneDimensionalMean.y });
         if (result.variance !== undefined) {
-            listItems.push({ name: 'Varianz (x)', value: result.variance.x.toString() });
-            listItems.push({ name: 'Varianz (y)', value: result.variance.y.toString() });
+            listItems.push({ name: 'Varianz (x)', value: result.variance.x });
+            listItems.push({ name: 'Varianz (y)', value: result.variance.y });
         }
         if (result.covariance !== undefined) {
-            listItems.push({ name: 'Kovarianz', value: result.covariance.toString() });
+            listItems.push({ name: 'Kovarianz', value: result.covariance });
         }
         if (result.correlationCoefficient !== undefined) {
-            listItems.push({ name: 'Korrelationskoeffizient', value: result.correlationCoefficient.toString() });
+            listItems.push({ name: 'Korrelationskoeffizient', value: result.correlationCoefficient });
         }
         if (result.regressionGraph !== undefined) {
-            listItems.push({ name: 'Qualität der Regressionsgerade (Bestimmtheitsmaß)', value: result.regressionGraph.quality.toString() });
+            listItems.push({ name: 'Qualität der Regressionsgerade (Bestimmtheitsmaß)', value: result.regressionGraph.quality });
             listItems.push({ name: 'Gleichung der Regressionsgerade', value: this.getRegressionGraphEquation(result.regressionGraph) });
         }
         return listItems;
@@ -41,14 +43,18 @@ export class ResultListService {
 
     private getRegressionGraphEquation(regressionGraph: IRegressionGraph): string {
         if (regressionGraph.xAxisSection !== undefined) {
-            return `x = ${regressionGraph.xAxisSection}`;
+            return `x = ${this.formatNumber(regressionGraph.xAxisSection)}`;
         } else if (regressionGraph.yAxisSection !== undefined) {
-            if (regressionGraph.incline == 0) {
-                return `y = ${regressionGraph.yAxisSection}`;
+            if (!regressionGraph.incline) {
+                return `y = ${this.formatNumber(regressionGraph.yAxisSection)}`;
             } else {
-                return `y = ${regressionGraph.incline} * x + ${regressionGraph.yAxisSection}`;
+                return `y = ${this.formatNumber(regressionGraph.incline)} * x + ${this.formatNumber(regressionGraph.yAxisSection)}`;
             }
         }
         return '-';
+    }
+
+    private formatNumber(value: number): string {
+        return formatNumber(value, Config.APP_LOCALE);
     }
 }

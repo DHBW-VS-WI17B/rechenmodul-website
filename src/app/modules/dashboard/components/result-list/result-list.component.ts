@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IResultListItem } from '../../interfaces';
@@ -31,5 +32,12 @@ export class ResultListComponent implements OnInit, OnDestroy {
             this.listItems = items;
             this.changeDetection.markForCheck();
         });
+    }
+
+    public isNumber(value: any): boolean {
+        if (_.isNumber(value)) {
+            return true;
+        }
+        return false;
     }
 }
