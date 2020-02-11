@@ -17,6 +17,8 @@ interface IPointSequenceElement extends IPoint {
     styleUrls: ['./point-sequence.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
+/** @class PointSequenceComponent. */
 export class PointSequenceComponent implements OnInit, OnDestroy {
     private isDestroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -27,8 +29,15 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
 
     public pointForm: FormGroup | undefined;
 
+    /**
+     * @param  {PointSequenceService} privatepointSequenceService
+     * @param  {ChangeDetectorRef} privatechangeDetection
+     */
     constructor(private pointSequenceService: PointSequenceService, private changeDetection: ChangeDetectorRef) {}
 
+    /**
+     * Suscribes to the PointObservable
+     */
     ngOnInit(): void {
         this.pointSequenceService.points$.pipe(takeUntil(this.isDestroyed$)).subscribe(points => {
             this.elements = this.convertPointsToPointSequenceElements(points, this.elements, this.globalSelectStatus);
@@ -36,11 +45,21 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Unsubscribe from the PointObservable
+     */
     ngOnDestroy() {
         this.isDestroyed$.next(true);
         this.isDestroyed$.complete();
     }
 
+    /**
+     * Converts IPoint-Objects to PointSequence-Objects
+     * @param  {IPoint[]} points
+     * @param  {IPointSequenceElement[]} existingElements
+     * @param  {boolean} globalSelectStatus
+     * @returns {IPointSequenceElement[]}
+     */
     public convertPointsToPointSequenceElements(
         points: IPoint[],
         existingElements: IPointSequenceElement[],
@@ -69,6 +88,10 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
         return elements;
     }
 
+    /**
+     * Checks if button to add point is enabled or disabled
+     * @returns {boolean}
+     */
     public isSubmitButtonDisabled(): boolean {
         if (_.isNil(this.inputValueX) || _.isNil(this.inputValueY)) {
             return true;
@@ -86,19 +109,34 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
         return true;
     }
 
+    /**
+     * Mastertoggle for the selection of all elements
+     * @param  {boolean} status
+     */
     public masterToggle(status: boolean): void {
         status === true ? this.selectAllElements() : this.unselectAllElements();
         this.globalSelectStatus = status;
     }
 
+    /**
+     * Select all elements in the list of points
+     */
     private selectAllElements(): void {
         this.elements.forEach(element => (element.isSelected = true));
     }
 
+    /**
+     * unselect all element in the list of points
+     */
     private unselectAllElements(): void {
         this.elements.forEach(element => (element.isSelected = false));
     }
 
+    /**
+     * Add a Point with value x and y, to the Obserable of points
+     * @param  {number|undefined} x The x value of the point
+     * @param  {number|undefined} y The y value of the point
+     */
     public addPoint(x: number | undefined, y: number | undefined): void {
         if (x === undefined || y === undefined) {
             return;
@@ -106,16 +144,31 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
         this.pointSequenceService.addPoint({ x: x, y: y });
     }
 
+    /**
+     * Update the x Value of an specific element in list
+     * @param  {IPointSequenceElement} element The Point that have to be updated
+     * @param  {number} updatedValue The new x value
+     */
     public updatePointValueX(element: IPointSequenceElement, updatedValue: number): void {
         element.value.x = updatedValue;
         this.pointSequenceService.updatePoint(element);
     }
 
+    /**
+     * Update the y Value of an specific element in list
+     * @param  {IPointSequenceElement} element The Point that have to be updated
+     * @param  {number} updatedValue The new y value
+     */
     public updatePointValueY(element: IPointSequenceElement, updatedValue: number): void {
         element.value.y = updatedValue;
         this.pointSequenceService.updatePoint(element);
     }
 
+    /**
+     * Return all selected point-elements in the list
+     * @param  {IPointSequenceElement[]} elements
+     * @return {IPointSequenceElement[]} Selected elements
+     */
     public getSelectedElements(elements: IPointSequenceElement[]): IPointSequenceElement[] {
         const selectedElements: IPointSequenceElement[] = [];
         for (const element of elements) {
@@ -127,16 +180,32 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
         return selectedElements;
     }
 
+    /**
+     * Returns:
+     * true: if all elements selected
+     * false: if not all elements selected
+     * @param  {IPointSequenceElement[]} elements All Elements in the list
+     * @return {boolean}
+     */
     private areAllElementsSelected(elements: IPointSequenceElement[]): boolean {
         const selectedElements = this.getSelectedElements(elements);
         return selectedElements.length === elements.length;
     }
 
+    /**
+     * Removes all points that are selected
+     * @param  {IPointSequenceElement[]} elements All Elements in the list
+     */
     public removeSelectedPoints(elements: IPointSequenceElement[]): void {
         const selectedElements = this.getSelectedElements(elements);
         this.pointSequenceService.removePoints(selectedElements);
     }
 
+    /**
+     * Toggles the selection of an element
+     * @param  {IPointSequenceElement[]} elements All Elements in the list
+     * @param  {boolean} status Has element changed
+     */
     public toggleElementSelection(elements: IPointSequenceElement[], status: boolean): void {
         if (status === false) {
             this.globalSelectStatus = false;
@@ -146,6 +215,11 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Track by in ngFor for a better performance
+     * @param  {number} index index of list element
+     * @param  {IPoint} item
+     */
     public trackByFn(index: number, item: IPoint) {
         return item.id;
     }

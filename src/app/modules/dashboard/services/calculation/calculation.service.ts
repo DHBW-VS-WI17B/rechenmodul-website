@@ -16,9 +16,19 @@ import { PointsService } from '../points/points.service';
 @Injectable({
     providedIn: 'root',
 })
+/** @class CalculationService. */
 export class CalculationService {
+    /**
+     * creates a instance of the service
+     * @param  {PointsService} PointsService
+     */
     constructor(private pointsService: PointsService) {}
 
+    /**
+     * calculates all results with the given points
+     * @param  {IPoint[]} points
+     * @returns {Promise<ICalculationResult | undefined>}
+     */
     public async calculate(points: IPoint[]): Promise<ICalculationResult | undefined> {
         if (points.length < 1) {
             return undefined;
@@ -51,14 +61,28 @@ export class CalculationService {
         return calculationResult;
     }
 
+    /**
+     * rounds number on two decimal places
+     * @param  {number} num
+     * @returns {number}
+     */
     private roundNumber(num: number): number {
         return _.round(num, 2);
     }
 
+    /**
+     * rounds pointvalues on two decimal places
+     * @param  {IPoint_Core} point
+     * @returns {IPoint_Core}
+     */
     private roundPoint(point: IPoint_Core): IPoint_Core {
         return <IPoint_Core>{ x: this.roundNumber(point.x), y: this.roundNumber(point.y) };
     }
 
+    /**
+     * Returns CalculationResult as an observable
+     * @returns {Observable<ICalculationResult | undefined>}
+     */
     public get calculate$(): Observable<ICalculationResult | undefined> {
         return this.pointsService.points$.pipe(
             switchMap(points => {
@@ -67,6 +91,11 @@ export class CalculationService {
         );
     }
 
+    /**
+     * Converts points to core points
+     * @param  {IPoint[]} points
+     * @returns {IPoint_Core[]}
+     */
     private convertPoints(points: IPoint[]): IPoint_Core[] {
         const corePoints: IPoint_Core[] = [];
         for (const point of points) {

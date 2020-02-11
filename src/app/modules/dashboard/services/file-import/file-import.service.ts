@@ -6,15 +6,28 @@ import { PointsService } from '../points/points.service';
 @Injectable({
     providedIn: 'root',
 })
+/** @class FileImportService. */
 export class FileImportService {
+    /**
+     * Creates an instance of the service
+     * @param  {PointsService} pointsService
+     */
     constructor(private pointsService: PointsService) {}
 
+    /**
+     * Imports CSV File
+     * @param  {Blob} file
+     */
     public async importFile(file: Blob): Promise<void> {
         const text = await this.getFileContentAsText(file);
         const pointValues = this.parseCSVToPointValues(text);
         this.setPoints(pointValues);
     }
 
+    /**
+     * Get the content of the file as string
+     * @param  {Blob} file
+     */
     private getFileContentAsText(file: Blob): Promise<string> {
         const promise = new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
@@ -26,6 +39,10 @@ export class FileImportService {
         return promise;
     }
 
+    /**
+     * Parses CSV-string to points
+     * @param  {string} csv
+     */
     private parseCSVToPointValues(csv: string): IPointValue[] {
         const lines = csv.split('\n');
         const pointValues: IPointValue[] = [];
@@ -46,6 +63,10 @@ export class FileImportService {
         return pointValues;
     }
 
+    /**
+     * set points
+     * @param  {IPointValue[]} pointValues
+     */
     private setPoints(pointValues: IPointValue[]): void {
         this.pointsService.reset();
         this.pointsService.addPoints(pointValues);

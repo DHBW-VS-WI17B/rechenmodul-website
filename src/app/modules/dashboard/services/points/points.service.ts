@@ -10,13 +10,23 @@ import { ValidationService } from '../validation/validation.service';
 @Injectable({
     providedIn: 'root',
 })
+/** @class PointsService. */
 export class PointsService {
     private readonly TAG = '[PointsService]';
     private pointsSubj: BehaviorSubject<IPoint[]> = new BehaviorSubject<IPoint[]>([]);
     private nextPointId: number = 0;
 
+    /**
+     * Creates Service Instance
+     * @param  {ValidationService} ValidationService
+     * @param  {LogService} LogService
+     */
     constructor(private validationService: ValidationService, private logService: LogService) {}
 
+    /**
+     * sets Points of the subject
+     * @param  {IPoint[]} points
+     */
     public setPoints(points: IPoint[]): void {
         const valid = this.validatePoints(points);
         if (!valid) {
@@ -26,12 +36,21 @@ export class PointsService {
         this.pointsSubj.next(points);
     }
 
+    /**
+     * deletes all points in the subject
+     * @returns void
+     */
     public reset(): void {
         this.logService.log(LogLevel.debug, this.TAG, 'RESET.', []);
         this.setPoints([]);
         this.nextPointId = 0;
     }
 
+    /**
+     * Adds a pointvalue x-times
+     * @param  {IPointValue} pointValue
+     * @param  {number} times
+     */
     public addPointMultipleTimes(pointValue: IPointValue, times: number): void {
         const pointValues: IPointValue[] = [];
         for (let i = 0; i < times; i++) {
@@ -40,6 +59,10 @@ export class PointsService {
         this.addPoints(pointValues);
     }
 
+    /**
+     * add points to the subject
+     * @param  {IPointValue[]} values
+     */
     public addPoints(values: IPointValue[]): void {
         const pointsArr = this.getPoints();
         for (const value of values) {
@@ -55,6 +78,10 @@ export class PointsService {
         this.setPoints(pointsArr);
     }
 
+    /**
+     * removes given points
+     * @param  {IPoint[]} pointsToRemove
+     */
     public removePoints(pointsToRemove: IPoint[]): void {
         const points = this.getPoints();
         const ids = _.map(pointsToRemove, pointToRemove => pointToRemove.id);
@@ -64,6 +91,11 @@ export class PointsService {
         this.setPoints(points);
     }
 
+    /**
+     * remove Points by value x-times
+     * @param  {IPointValue} pointValue
+     * @param  {number} times
+     */
     public removePointsByValueMultipleTimes(pointValue: IPointValue, times: number): void {
         const points = this.getPoints();
         const pointsToRemove: IPoint[] = [];
@@ -80,6 +112,10 @@ export class PointsService {
         this.removePoints(pointsToRemove);
     }
 
+    /**
+     * updates given points
+     * @param  {IPoint[]} updatedPoints
+     */
     public updatePoints(updatedPoints: IPoint[]): void {
         if (updatedPoints.length < 1) {
             return;
@@ -100,11 +136,20 @@ export class PointsService {
         this.setPoints(points);
     }
 
+    /**
+     * return all points in subject
+     * @returns {IPoint[]}
+     */
     private getPoints(): IPoint[] {
         const points = this.pointsSubj.getValue();
         return _.cloneDeep(points);
     }
 
+    /**
+     * gets points with specific value
+     * @param  {IPointValue<number|undefined>} value
+     * @returns {IPoint[]}
+     */
     public getPointsByValue(value: IPointValue<number | undefined>): IPoint[] {
         const points = this.getPoints();
         const pointsByValue: IPoint[] = [];
@@ -120,11 +165,22 @@ export class PointsService {
         return pointsByValue;
     }
 
+    /**
+     * gets all points out of the subject
+     *  @returns {Observable<IPoint[]>}
+     */
     public get points$(): Observable<IPoint[]> {
         const points = this.pointsSubj.asObservable();
         return points;
     }
 
+    /**
+     * validate the given points
+     * Returns true: if valid
+     * Returns false: if invalid
+     * @param  {IPoint[]} points
+     * @returns {boolean}
+     */
     private validatePoints(points: IPoint[]): boolean {
         this.logService.log(LogLevel.debug, this.TAG, 'Validate points.', []);
         // Validate sample size
@@ -149,6 +205,11 @@ export class PointsService {
         return true;
     }
 
+    /**
+     * get number of different PointValues in the subject
+     * @param  {IPoint[]} points
+     * @returns {number}
+     */
     public getNumberOfDifferentPointValues(points: IPoint[]): number {
         const differentPointValues: IPointValue[] = [];
         for (const point of points) {
@@ -162,12 +223,26 @@ export class PointsService {
         return differentPointValues.length;
     }
 
+    /**
+     * validate point value
+     * Returns true: if valid
+     * Returns false: if invalid
+     * @param  {IPointValue} pointValue
+     * @returns {boolean}
+     */
     private validatePointValue(pointValue: IPointValue): boolean {
         const xIsValid = this.validatePointValueNumber(pointValue.x) && Math.abs(pointValue.x) <= Number.MAX_SAFE_INTEGER;
         const yIsValid = this.validatePointValueNumber(pointValue.y) && Math.abs(pointValue.y) <= Number.MAX_SAFE_INTEGER;
         return xIsValid && yIsValid;
     }
 
+    /**
+     * validate PointValue
+     * Returns true: if valid
+     * Returns false: if invalid
+     * @param  {number} value of the point
+     * @returns {boolean}
+     */
     private validatePointValueNumber(value: number): boolean {
         return this.validationService.validate(Config.REGEX_POINT_VALUE_NUMBER, value.toString());
     }

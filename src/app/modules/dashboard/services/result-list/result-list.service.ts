@@ -10,13 +10,27 @@ import { ResultService } from '../result/result.service';
 @Injectable({
     providedIn: 'root',
 })
+/** @class ResultListService. */
 export class ResultListService {
+    /**
+     * Creates a instance of the service
+     * @param  {ResultService} ResultService
+     */
     constructor(private resultService: ResultService) {}
 
+    /**
+     * gets the converted ResultList as Observable
+     * @returns {Observable<IResultListItem[]>}
+     */
     public get items$(): Observable<IResultListItem[]> {
         return this.resultService.result$.pipe(map(result => this.convertCalculationResultToResultListItems(result)));
     }
 
+    /**
+     * converts the CalculationResult to ResultListItems
+     * @param  {ICalculationResult|undefined} result
+     * @returns {IResultListItem[]}
+     */
     private convertCalculationResultToResultListItems(result: ICalculationResult | undefined): IResultListItem[] {
         if (!result) {
             return [];
@@ -48,7 +62,11 @@ export class ResultListService {
 
         return listItems;
     }
-
+    /**
+     * get the RegressionGraph equation
+     * @param  {IRegressionGraph} regressionGraph
+     * @returns {string}
+     */
     private getRegressionGraphEquation(regressionGraph: IRegressionGraph): string {
         if (regressionGraph.xAxisSection !== undefined) {
             return `x = ${this.formatNumber(regressionGraph.xAxisSection)}`;
@@ -62,6 +80,11 @@ export class ResultListService {
         return '-';
     }
 
+    /**
+     * returns the qualitiy in words
+     * @param  {number} quality
+     * @returns {string}
+     */
     private getQualityInWords(quality: number): string {
         if (quality >= 0 && quality < 0.5) {
             return 'Ungenügende Qualität';
@@ -78,6 +101,11 @@ export class ResultListService {
         return '';
     }
 
+    /**
+     * format a number to only two decimal places
+     * @param  {number} value
+     * @returns {string}
+     */
     private formatNumber(value: number): string {
         return formatNumber(value, Config.APP_LOCALE);
     }

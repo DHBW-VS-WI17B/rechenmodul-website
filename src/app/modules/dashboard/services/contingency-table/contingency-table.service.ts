@@ -9,9 +9,18 @@ import { PointsService } from '../points/points.service';
 @Injectable({
     providedIn: 'root',
 })
+/** @class ContingencyTableService. */
 export class ContingencyTableService {
+    /**
+     * creates a instance of the service
+     * @param  {PointsService} PointsService
+     */
     constructor(private pointsService: PointsService) {}
 
+    /**
+     * returns Contingency table as observable
+     * @returns {Observable<IContingencyTable>}
+     */
     public get table$(): Observable<IContingencyTable> {
         return this.pointsService.points$.pipe(
             map(points => {
@@ -20,6 +29,11 @@ export class ContingencyTableService {
         );
     }
 
+    /**
+     * convert Points to contingency table
+     * @param  {IPoint[]} points
+     * @returns {IContingencyTable}
+     */
     private convertPointsToContingencyTable(points: IPoint[]): IContingencyTable {
         let table: IContingencyTable = {
             y: [],
@@ -55,6 +69,11 @@ export class ContingencyTableService {
         return table;
     }
 
+    /**
+     * fills the empty cells of the table
+     * @param  {IContingencyTable} table
+     * @returns {IContingencyTable}
+     */
     private fillEmptyCells(table: IContingencyTable): IContingencyTable {
         const maxDifferentValues = Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES;
         const maxRowLength = table.x.length + 1 > maxDifferentValues ? maxDifferentValues : table.x.length + 1;
@@ -82,6 +101,11 @@ export class ContingencyTableService {
         return table;
     }
 
+    /**
+     * updates y value
+     * @param  {number|undefined} currentValue
+     * @param  {number|undefined} updatedValue
+     */
     public updateValueTypeY(currentValue: number | undefined, updatedValue: number | undefined): void {
         if (currentValue === undefined) {
             return;
@@ -101,6 +125,11 @@ export class ContingencyTableService {
         }
     }
 
+    /**
+     * updates x value
+     * @param  {number|undefined} currentValue
+     * @param  {number|undefined} updatedValue
+     */
     public updateValueTypeX(currentValue: number | undefined, updatedValue: number | undefined): void {
         if (currentValue === undefined) {
             return;
@@ -120,6 +149,13 @@ export class ContingencyTableService {
         }
     }
 
+    /**
+     * updates frequency of point with x and y value
+     * @param  {number|undefined} x
+     * @param  {number|undefined} y
+     * @param  {number|undefined} currentValue
+     * @param  {number|undefined} updatedValue
+     */
     public updateValueTypeH(
         x: number | undefined,
         y: number | undefined,
