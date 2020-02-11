@@ -92,7 +92,6 @@ export class ResultChartComponent implements OnInit, OnDestroy {
                     ],
                     xAxes: [
                         {
-                            stacked: true,
                             scaleLabel: {
                                 display: true,
                                 labelString: 'x',
