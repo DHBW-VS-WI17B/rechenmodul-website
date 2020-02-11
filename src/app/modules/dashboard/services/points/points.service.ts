@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Config } from '@app/config';
 import { LogLevel } from '@app/core/enums';
 import { LogService } from '@app/core/services';
+import { NotificationService } from '@app/shared';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IPoint, IPointValue } from '../../interfaces';
@@ -21,7 +22,11 @@ export class PointsService {
      * @param  {ValidationService} ValidationService
      * @param  {LogService} LogService
      */
-    constructor(private validationService: ValidationService, private logService: LogService) {}
+    constructor(
+        private validationService: ValidationService,
+        private logService: LogService,
+        private notificationService: NotificationService,
+    ) {}
 
     /**
      * sets Points of the subject
@@ -184,12 +189,20 @@ export class PointsService {
     private validatePoints(points: IPoint[]): boolean {
         this.logService.log(LogLevel.debug, this.TAG, 'Validate points.', []);
         // Validate sample size
+        if (points.length >= Config.MAX_SAMPLE_SIZE) {
+            this.notificationService.showNotification({ message: `Maximaler Stichprobenumfang von ${Config.MAX_SAMPLE_SIZE} erreicht.` });
+        }
         if (points.length > Config.MAX_SAMPLE_SIZE) {
             this.logService.log(LogLevel.warn, this.TAG, 'Sample size too large.', [points.length]);
             return false;
         }
         // Validate number of different point values
         const numberOfDifferentPointValues = this.getNumberOfDifferentPointValues(points);
+        if (numberOfDifferentPointValues >= Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES) {
+            this.notificationService.showNotification({
+                message: `Maximaler Umfang von ${Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES} verschiedenen Punkten erreicht.`,
+            });
+        }
         if (numberOfDifferentPointValues > Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES) {
             this.logService.log(LogLevel.warn, this.TAG, 'Number of different point values too large.', [numberOfDifferentPointValues]);
             return false;

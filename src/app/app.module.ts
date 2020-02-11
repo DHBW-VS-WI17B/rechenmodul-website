@@ -6,12 +6,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { Config } from './config';
+import { CoreModule } from './core';
+import { SharedModule } from './shared';
 
 registerLocaleData(localeDe, 'de');
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule],
+    imports: [CoreModule, SharedModule, BrowserModule, AppRoutingModule, BrowserAnimationsModule],
     providers: [{ provide: LOCALE_ID, useValue: Config.APP_LOCALE }],
     bootstrap: [AppComponent],
 })
