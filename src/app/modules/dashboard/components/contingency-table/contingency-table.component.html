@@ -31,8 +31,8 @@
                 <div class="col"
                      *ngFor="let item_y of table.y; index as index_y; trackBy: trackByFn">
                     <input type="number"
-                           step="0.5"
                            min="0"
+                           [max]="MAX_SAMPLE_SIZE"
                            [ngModel]="getValueFor(VALUE_TYPE_H, index_x, index_y)"
                            (ngModelChange)="updateValueFor(VALUE_TYPE_H, $event, index_x, index_y)"
                            [placeholder]="getPlaceholderFor(VALUE_TYPE_H, index_x, index_y)"

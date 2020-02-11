@@ -30,7 +30,7 @@ export class PointsService {
     public setPoints(points: IPoint[]): void {
         const valid = this.validatePoints(points);
         if (!valid) {
-            return;
+            points = this.getPoints();
         }
         this.logService.log(LogLevel.debug, this.TAG, 'Set points.', [points]);
         this.pointsSubj.next(points);

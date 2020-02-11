@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Config } from '@app/config';
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -24,6 +25,8 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
     public readonly VALUE_TYPE_HX = ContingencyTableValueType.hx;
     public readonly VALUE_TYPE_HY = ContingencyTableValueType.hy;
     public readonly VALUE_TYPE_HXY = ContingencyTableValueType.hxy;
+
+    public readonly MAX_SAMPLE_SIZE = Config.MAX_SAMPLE_SIZE;
 
     /**
      * @param  {ContingencyTableService} ContingencyTableService

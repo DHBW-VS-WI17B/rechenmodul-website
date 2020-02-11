@@ -168,6 +168,9 @@ export class ContingencyTableService {
         if (updatedValue !== undefined && updatedValue > Config.MAX_SAMPLE_SIZE) {
             updatedValue = Config.MAX_SAMPLE_SIZE;
         }
+        if (currentValue !== undefined && currentValue > Config.MAX_SAMPLE_SIZE) {
+            currentValue = Config.MAX_SAMPLE_SIZE;
+        }
         if (currentValue === undefined) {
             currentValue = 0;
         }
@@ -179,7 +182,7 @@ export class ContingencyTableService {
             x: x,
             y: y,
         };
-        if (currentValue < updatedValue) {
+        if (currentValue <= updatedValue) {
             this.pointsService.addPointMultipleTimes(pointValue, diff);
         } else if (currentValue > updatedValue) {
             this.pointsService.removePointsByValueMultipleTimes(pointValue, diff);
