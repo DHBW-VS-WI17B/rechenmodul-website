@@ -13,6 +13,7 @@ export class LogService {
         const fullMessage = `${tag} ${message}`;
         switch (level) {
             case LogLevel.debug:
+                // tslint:disable-next-line: no-console
                 console.debug(fullMessage, ...objN);
                 break;
             case LogLevel.log:

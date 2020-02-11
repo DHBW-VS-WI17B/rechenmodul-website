@@ -47,6 +47,11 @@ export class PointSequenceService {
         this.pointsService.updatePoints([point]);
     }
 
+    /**
+     * get number of different points in the whole list of points
+     * @param  {IPoint[]} points
+     * @returns {number}
+     */
     public getNumberOfDifferentPointValues(points: IPoint[]): number {
         return this.pointsService.getNumberOfDifferentPointValues(points);
     }

@@ -45,7 +45,7 @@ export class ResultListService {
         if (result.covariance !== undefined) {
             listItems.push({ name: 'Kovarianz', value: result.covariance });
         }
-        if (!result.points.every((val, _i, arr) => val.x == arr[0].x && val.y == arr[0].y)) {
+        if (!result.points.every((val, _i, arr) => val.x === arr[0].x && val.y === arr[0].y)) {
             if (result.correlationCoefficient !== undefined) {
                 listItems.push({ name: 'Korrelationskoeffizient', value: result.correlationCoefficient });
             }
