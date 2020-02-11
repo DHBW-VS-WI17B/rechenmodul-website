@@ -70,7 +70,7 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
     }
 
     public isSubmitButtonDisabled(): boolean {
-        if (!this.inputValueX || !this.inputValueY) {
+        if (_.isNil(this.inputValueX) || _.isNil(this.inputValueY)) {
             return true;
         }
         const numberOfDifferentPointValues = this.pointSequenceService.getNumberOfDifferentPointValues(this.elements);
