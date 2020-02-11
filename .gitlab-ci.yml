@@ -3,6 +3,7 @@ variables:
 
 stages:
     - build
+    - lint
     - test
     - deploy
 
@@ -22,6 +23,18 @@ build:
     artifacts:
         paths:
             - dist/
+    only:
+        - master
+        - merge_requests
+
+lint:
+    image: node:10
+    stage: lint
+    script:
+        - node -v
+        - npm -v
+        - npm config set unsafe-perm true; npm install --quiet
+        - npm run lint
     only:
         - master
         - merge_requests
