@@ -12,6 +12,12 @@
         "e2e": "ng e2e"
     },
     "private": true,
+    "contributors": [
+        "Robin Genz",
+        "Elias Schrempp",
+        "Simon Eßlinger"
+    ],
+    "license": "MIT",
     "dependencies": {
         "@angular/animations": "8.2.14",
         "@angular/cdk": "~8.2.3",
