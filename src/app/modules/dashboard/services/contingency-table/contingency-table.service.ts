@@ -165,12 +165,6 @@ export class ContingencyTableService {
         if (x === undefined || y === undefined) {
             return;
         }
-        if (updatedValue !== undefined && updatedValue > Config.MAX_SAMPLE_SIZE) {
-            updatedValue = Config.MAX_SAMPLE_SIZE;
-        }
-        if (currentValue !== undefined && currentValue > Config.MAX_SAMPLE_SIZE) {
-            currentValue = Config.MAX_SAMPLE_SIZE;
-        }
         if (currentValue === undefined) {
             currentValue = 0;
         }

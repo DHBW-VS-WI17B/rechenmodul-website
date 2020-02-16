@@ -12,7 +12,8 @@
                     <input type="number"
                            step="0.5"
                            [ngModel]="getValueFor(VALUE_TYPE_Y, index_y, undefined)"
-                           (ngModelChange)="updateValueFor(VALUE_TYPE_Y, $event, index_y, undefined)"
+                           (blur)="updateValueFor(VALUE_TYPE_Y, $event.target.valueAsNumber, index_y, undefined)"
+                           (keyup.enter)="updateValueFor(VALUE_TYPE_Y, $event.target.valueAsNumber, index_y, undefined)"
                            [placeholder]="getPlaceholderFor(VALUE_TYPE_Y, index_y, undefined)"
                            [disabled]="index_y > 0 && getValueFor(VALUE_TYPE_Y, index_y - 1, undefined) === undefined">
                 </div>
@@ -24,7 +25,8 @@
                     <input type="number"
                            step="0.5"
                            [ngModel]="getValueFor(VALUE_TYPE_X, index_x, undefined)"
-                           (ngModelChange)="updateValueFor(VALUE_TYPE_X, $event, index_x, undefined)"
+                           (blur)="updateValueFor(VALUE_TYPE_X, $event.target.valueAsNumber, index_x, undefined)"
+                           (keyup.enter)="updateValueFor(VALUE_TYPE_X, $event.target.valueAsNumber, index_x, undefined)"
                            [placeholder]="getPlaceholderFor(VALUE_TYPE_X, index_x, undefined)"
                            [disabled]="index_x > 0 && getValueFor(VALUE_TYPE_X, index_x - 1, undefined) === undefined">
                 </div>
@@ -34,7 +36,8 @@
                            min="0"
                            [max]="MAX_SAMPLE_SIZE"
                            [ngModel]="getValueFor(VALUE_TYPE_H, index_x, index_y)"
-                           (ngModelChange)="updateValueFor(VALUE_TYPE_H, $event, index_x, index_y)"
+                           (blur)="updateValueFor(VALUE_TYPE_H, $event.target.valueAsNumber, index_x, index_y)"
+                           (keyup.enter)="updateValueFor(VALUE_TYPE_H, $event.target.valueAsNumber, index_x, index_y)"
                            [placeholder]="getPlaceholderFor(VALUE_TYPE_H, index_x, index_y)"
                            [disabled]="getValueFor(VALUE_TYPE_Y, index_y, undefined) === undefined || getValueFor(VALUE_TYPE_X, index_x, undefined) === undefined">
                 </div>

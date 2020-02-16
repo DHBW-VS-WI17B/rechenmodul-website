@@ -101,7 +101,7 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
         if (this.table === undefined) {
             return;
         }
-        if (updatedValue === null) {
+        if (updatedValue === null || _.isNaN(updatedValue)) {
             updatedValue = undefined;
         }
         const currentValue = this.getValueFor(valueType, index1, index2);

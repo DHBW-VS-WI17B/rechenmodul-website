@@ -189,8 +189,10 @@ export class PointsService {
     private validatePoints(points: IPoint[]): boolean {
         this.logService.log(LogLevel.debug, this.TAG, 'Validate points.', []);
         // Validate sample size
-        if (points.length >= Config.MAX_SAMPLE_SIZE) {
-            this.notificationService.showNotification({ message: `Maximaler Stichprobenumfang von ${Config.MAX_SAMPLE_SIZE} erreicht.` });
+        if (points.length > Config.MAX_SAMPLE_SIZE) {
+            this.notificationService.showNotification({
+                message: `Fehlgeschlagen: Maximaler Stichprobenumfang von ${Config.MAX_SAMPLE_SIZE} überschritten!`,
+            });
         }
         if (points.length > Config.MAX_SAMPLE_SIZE) {
             this.logService.log(LogLevel.warn, this.TAG, 'Sample size too large.', [points.length]);
@@ -198,9 +200,11 @@ export class PointsService {
         }
         // Validate number of different point values
         const numberOfDifferentPointValues = this.getNumberOfDifferentPointValues(points);
-        if (numberOfDifferentPointValues >= Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES) {
+        if (numberOfDifferentPointValues > Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES) {
             this.notificationService.showNotification({
-                message: `Maximaler Umfang von ${Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES} verschiedenen Punkten erreicht.`,
+                message:
+                    `Fehlgeschlagen: Maximaler Umfang von ${Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES} ` +
+                    `verschiedenen Punkten überschritten!`,
             });
         }
         if (numberOfDifferentPointValues > Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES) {
