@@ -149,7 +149,11 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
      * @param  {IPointSequenceElement} element The Point that have to be updated
      * @param  {number} updatedValue The new x value
      */
-    public updatePointValueX(element: IPointSequenceElement, updatedValue: number): void {
+    public updatePointValueX(element: IPointSequenceElement, updatedValue: number | undefined | null): void {
+        if (_.isNil(updatedValue) || _.isNaN(updatedValue)) {
+            this.pointSequenceService.removePoints([element]);
+            return;
+        }
         element.value.x = updatedValue;
         this.pointSequenceService.updatePoint(element);
     }
@@ -159,7 +163,11 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
      * @param  {IPointSequenceElement} element The Point that have to be updated
      * @param  {number} updatedValue The new y value
      */
-    public updatePointValueY(element: IPointSequenceElement, updatedValue: number): void {
+    public updatePointValueY(element: IPointSequenceElement, updatedValue: number | undefined | null): void {
+        if (_.isNil(updatedValue) || _.isNaN(updatedValue)) {
+            this.pointSequenceService.removePoints([element]);
+            return;
+        }
         element.value.y = updatedValue;
         this.pointSequenceService.updatePoint(element);
     }

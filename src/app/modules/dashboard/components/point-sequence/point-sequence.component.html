@@ -59,14 +59,16 @@
                         <input type="number"
                                step="0.5"
                                [ngModel]="element.value.x"
-                               (ngModelChange)="updatePointValueX(element, $event)"
+                               (blur)="updatePointValueX(element, $event.target.valueAsNumber)"
+                               (keyup.enter)="updatePointValueX(element, $event.target.valueAsNumber)"
                                placeholder="X-Wert">
                     </div>
                     <div class="col">
                         <input type="number"
                                step="0.5"
                                [ngModel]="element.value.y"
-                               (ngModelChange)="updatePointValueY(element, $event)"
+                               (blur)="updatePointValueY(element, $event.target.valueAsNumber)"
+                               (keyup.enter)="updatePointValueY(element, $event.target.valueAsNumber)"
                                placeholder="Y-Wert">
                     </div>
                 </div>
