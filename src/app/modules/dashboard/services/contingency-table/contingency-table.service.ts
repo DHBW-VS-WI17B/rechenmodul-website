@@ -3,7 +3,7 @@ import { Config } from '@app/config';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IContingencyTable, IPoint, IPointValue } from '../../interfaces';
+import { IContingencyTable, IPoint } from '../../interfaces';
 import { PointsService } from '../points/points.service';
 
 @Injectable({
@@ -29,6 +29,11 @@ export class ContingencyTableService {
         );
     }
 
+    public setTable(table: IContingencyTable): void {
+        const points = this.convertContingencyTableToPoints(table);
+        this.pointsService.setPoints(points);
+    }
+
     /**
      * convert Points to contingency table
      * @param  {IPoint[]} points
@@ -42,19 +47,19 @@ export class ContingencyTableService {
         };
         for (let i = 0; i < points.length; i++) {
             const point = points[i];
-            const indexOfValueX = _.findIndex(table.x, x => x === point.value.x);
-            const indexOfValueY = _.findIndex(table.y, y => y === point.value.y);
+            const indexOfValueX = _.findIndex(table.x, x => x === point.x);
+            const indexOfValueY = _.findIndex(table.y, y => y === point.y);
             if (indexOfValueX === -1) {
                 if (table.x === undefined) {
                     table.x = [];
                 }
-                table.x.push(point.value.x);
+                table.x.push(point.x);
             }
             if (indexOfValueY === -1) {
                 if (table.y === undefined) {
                     table.y = [];
                 }
-                table.y.push(point.value.y);
+                table.y.push(point.y);
             }
             if (indexOfValueX === -1 || indexOfValueY === -1) {
                 i--;
@@ -67,6 +72,31 @@ export class ContingencyTableService {
         }
         table = this.fillEmptyCells(table);
         return table;
+    }
+
+    private convertContingencyTableToPoints(contingencyTable: IContingencyTable): IPoint[] {
+        const pointValues: IPoint[] = [];
+        for (let i = 0; i < contingencyTable.h.length; i++) {
+            const x = contingencyTable.x[i];
+            if (x === undefined) {
+                continue;
+            }
+            for (let j = 0; j < contingencyTable.h[i].length; j++) {
+                const y = contingencyTable.y[j];
+                const h = contingencyTable.h[i][j];
+                if (y === undefined || h === undefined) {
+                    continue;
+                }
+                _.times(h, () => {
+                    const pointValue: IPoint = {
+                        x: x,
+                        y: y,
+                    };
+                    pointValues.push(pointValue);
+                });
+            }
+        }
+        return pointValues;
     }
 
     /**
@@ -99,87 +129,5 @@ export class ContingencyTableService {
             }
         }
         return table;
-    }
-
-    /**
-     * updates y value
-     * @param  {number|undefined} currentValue
-     * @param  {number|undefined} updatedValue
-     */
-    public updateValueTypeY(currentValue: number | undefined, updatedValue: number | undefined): void {
-        if (currentValue === undefined) {
-            return;
-        }
-        const currentPointValue: IPointValue<number | undefined> = {
-            x: undefined,
-            y: currentValue,
-        };
-        const points = this.pointsService.getPointsByValue(currentPointValue);
-        if (updatedValue === undefined) {
-            this.pointsService.removePoints(points);
-        } else {
-            for (const point of points) {
-                point.value.y = updatedValue;
-            }
-            this.pointsService.updatePoints(points);
-        }
-    }
-
-    /**
-     * updates x value
-     * @param  {number|undefined} currentValue
-     * @param  {number|undefined} updatedValue
-     */
-    public updateValueTypeX(currentValue: number | undefined, updatedValue: number | undefined): void {
-        if (currentValue === undefined) {
-            return;
-        }
-        const currentPointValue: IPointValue<number | undefined> = {
-            x: currentValue,
-            y: undefined,
-        };
-        const points = this.pointsService.getPointsByValue(currentPointValue);
-        if (updatedValue === undefined) {
-            this.pointsService.removePoints(points);
-        } else {
-            for (const point of points) {
-                point.value.x = updatedValue;
-            }
-            this.pointsService.updatePoints(points);
-        }
-    }
-
-    /**
-     * updates frequency of point with x and y value
-     * @param  {number|undefined} x
-     * @param  {number|undefined} y
-     * @param  {number|undefined} currentValue
-     * @param  {number|undefined} updatedValue
-     */
-    public updateValueTypeH(
-        x: number | undefined,
-        y: number | undefined,
-        currentValue: number | undefined,
-        updatedValue: number | undefined,
-    ): void {
-        if (x === undefined || y === undefined) {
-            return;
-        }
-        if (currentValue === undefined) {
-            currentValue = 0;
-        }
-        if (updatedValue === undefined) {
-            updatedValue = 0;
-        }
-        const diff = Math.abs(currentValue - updatedValue);
-        const pointValue: IPointValue = {
-            x: x,
-            y: y,
-        };
-        if (currentValue <= updatedValue) {
-            this.pointsService.addPointMultipleTimes(pointValue, diff);
-        } else if (currentValue > updatedValue) {
-            this.pointsService.removePointsByValueMultipleTimes(pointValue, diff);
-        }
     }
 }

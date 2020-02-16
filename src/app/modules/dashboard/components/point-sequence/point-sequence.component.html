@@ -7,7 +7,7 @@
             <mat-form-field>
                 <input matInput
                        type="number"
-                       step="0.5"
+                       step="any"
                        placeholder="X-Wert"
                        [(ngModel)]="inputValueX"
                        [ngModelOptions]="{standalone: true}">
@@ -15,17 +15,18 @@
             <mat-form-field>
                 <input matInput
                        type="number"
-                       step="0.5"
+                       step="any"
                        placeholder="Y-Wert"
                        [(ngModel)]="inputValueY"
                        [ngModelOptions]="{standalone: true}">
             </mat-form-field>
             <button mat-button
                     type="submit"
-                    [disabled]=isSubmitButtonDisabled()
-                    (click)="addPoint(inputValueX, inputValueY)"
-                    color="primary">
-                <mat-icon>add</mat-icon>
+                    [disabled]="isAddElementButtonDisabled()"
+                    (click)="addElement(inputValueX, inputValueY)"
+                    color="primary"
+                    mat-stroked-button>
+                Hinzufügen
             </button>
         </form>
         <button mat-button
@@ -34,11 +35,15 @@
             <mat-icon>delete</mat-icon>
         </button>
 
-        <div class="table">
+        <form class="table"
+              id="pointSequenceForm"
+              #pointSequenceForm
+              ngNativeValidate>
             <div class="header row">
                 <div class="col">
                     <mat-checkbox [ngModel]="globalSelectStatus"
-                                  (ngModelChange)="masterToggle($event)"></mat-checkbox>
+                                  (ngModelChange)="masterToggle($event)"
+                                  [ngModelOptions]="{standalone: true}"></mat-checkbox>
                 </div>
                 <div class="col">
                     X-Wert
@@ -52,27 +57,36 @@
                      *ngFor="let element of elements; trackBy: trackByFn">
                     <div class="col">
                         <mat-checkbox [ngModel]="element.isSelected"
-                                      (ngModelChange)="element.isSelected = $event; toggleElementSelection(elements, $event)">
+                                      (ngModelChange)="element.isSelected = $event; toggleElementSelection(elements, $event)"
+                                      [ngModelOptions]="{standalone: true}">
                         </mat-checkbox>
                     </div>
                     <div class="col">
                         <input type="number"
-                               step="0.5"
+                               step="any"
                                [ngModel]="element.value.x"
-                               (blur)="updatePointValueX(element, $event.target.valueAsNumber)"
-                               (keyup.enter)="updatePointValueX(element, $event.target.valueAsNumber)"
+                               (ngModelChange)="updateElementValue(element, { y: element.value.y, x: $event })"
+                               [ngModelOptions]="{standalone: true}"
                                placeholder="X-Wert">
                     </div>
                     <div class="col">
                         <input type="number"
-                               step="0.5"
+                               step="any"
                                [ngModel]="element.value.y"
-                               (blur)="updatePointValueY(element, $event.target.valueAsNumber)"
-                               (keyup.enter)="updatePointValueY(element, $event.target.valueAsNumber)"
+                               (ngModelChange)="updateElementValue(element, { y: $event, x: element.value.x })"
+                               [ngModelOptions]="{standalone: true}"
                                placeholder="Y-Wert">
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </mat-card-content>
+    <mat-card-actions align="end">
+        <div fxFlex></div>
+        <button mat-button
+                color="primary"
+                type="submit"
+                form="pointSequenceForm"
+                (click)="saveElements(elements)">Übernehmen</button>
+    </mat-card-actions>
 </mat-card>

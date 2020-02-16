@@ -4,16 +4,17 @@ mat-card-content {
 
 form {
     display: flex;
+    flex-wrap: wrap;
 }
 
 form>mat-form-field {
-    width: 40%;
+    min-width: 100px;
     margin-right: 12px;
 }
 
 form>button {
-    width: 20%;
-    margin: 12px 0px;
+    min-width: 100px;
+    height: 36px;
 }
 
 .table {

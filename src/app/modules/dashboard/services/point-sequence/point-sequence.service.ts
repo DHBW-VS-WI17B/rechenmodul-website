@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IPoint } from '../../interfaces';
-import { IPointValue } from '../../interfaces/point-value';
 import { PointsService } from '../points/points.service';
 
 @Injectable({
@@ -23,28 +22,8 @@ export class PointSequenceService {
         return this.pointsService.points$;
     }
 
-    /**
-     * Adds a Point to Observable
-     * @param  {IPointValue} value
-     */
-    public addPoint(value: IPointValue): void {
-        this.pointsService.addPoints([value]);
-    }
-
-    /**
-     * Removes points from Observable
-     * @param  {IPoint[]} points
-     */
-    public removePoints(points: IPoint[]): void {
-        this.pointsService.removePoints(points);
-    }
-
-    /**
-     * Update specific point to Observable
-     * @param  {IPoint} point
-     */
-    public updatePoint(point: IPoint): void {
-        this.pointsService.updatePoints([point]);
+    public setPoints(points: IPoint[]): void {
+        this.pointsService.setPoints(points);
     }
 
     /**
@@ -52,7 +31,7 @@ export class PointSequenceService {
      * @param  {IPoint[]} points
      * @returns {number}
      */
-    public getNumberOfDifferentPointValues(points: IPoint[]): number {
-        return this.pointsService.getNumberOfDifferentPointValues(points);
+    public getNumberOfDifferentPoints(points: IPoint[]): number {
+        return this.pointsService.getNumberOfDifferentPoints(points);
     }
 }

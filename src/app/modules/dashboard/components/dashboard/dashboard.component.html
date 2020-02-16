@@ -9,6 +9,12 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
+    <mat-tab-group backgroundColor="primary"
+                   [selectedIndex]="activeTabIndex"
+                   (focusChange)="changeTab($event)">
+        <mat-tab label="Punktfolge"></mat-tab>
+        <mat-tab label="Kontingenztafel"></mat-tab>
+    </mat-tab-group>
 </header>
 
 <mat-menu #appMenu="matMenu">
@@ -24,8 +30,10 @@
 <main class="padding-8">
     <div class="row">
         <div class="col">
-            <app-point-sequence class="margin-8"></app-point-sequence>
-            <app-contingency-table class="margin-8"></app-contingency-table>
+            <app-point-sequence [hidden]="activeTabIndex !== 0"
+                                class="margin-8"></app-point-sequence>
+            <app-contingency-table [hidden]="activeTabIndex !== 1"
+                                   class="margin-8"></app-contingency-table>
         </div>
         <div class="col">
             <app-result-list class="margin-8"></app-result-list>

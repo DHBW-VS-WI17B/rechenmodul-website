@@ -1,13 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import {
-    calcCorrelationCoefficient,
-    calcCovariance,
-    calcOneDimensionalMean,
-    calcRegressionGraph,
-    calcVariance,
-    IPoint as IPoint_Core,
-} from 'rechenmodul-core';
+import { calcCorrelationCoefficient, calcCovariance, calcOneDimensionalMean, calcRegressionGraph, calcVariance } from 'rechenmodul-core';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ICalculationResult, IPoint } from '../../interfaces';
@@ -33,21 +26,20 @@ export class CalculationService {
         if (points.length < 1) {
             return undefined;
         }
-        const pointsForCore = this.convertPoints(points);
-        const oneDimensionalMean = await calcOneDimensionalMean(pointsForCore);
+        const oneDimensionalMean = await calcOneDimensionalMean(points);
         const calculationResult: ICalculationResult = {
             correlationCoefficient: undefined,
             covariance: undefined,
             variance: undefined,
             oneDimensionalMean: this.roundPoint(oneDimensionalMean),
-            points: pointsForCore,
+            points: points,
             regressionGraph: undefined,
         };
         if (points.length > 1) {
-            const variance = await calcVariance(pointsForCore, oneDimensionalMean);
-            const covariance = await calcCovariance(pointsForCore, oneDimensionalMean);
-            const correlationCoefficient = await calcCorrelationCoefficient(pointsForCore, variance, covariance);
-            const regressionGraph = await calcRegressionGraph(pointsForCore, variance, covariance, oneDimensionalMean);
+            const variance = await calcVariance(points, oneDimensionalMean);
+            const covariance = await calcCovariance(points, oneDimensionalMean);
+            const correlationCoefficient = await calcCorrelationCoefficient(points, variance, covariance);
+            const regressionGraph = await calcRegressionGraph(points, variance, covariance, oneDimensionalMean);
             calculationResult.variance = this.roundPoint(variance);
             calculationResult.covariance = this.roundNumber(covariance);
             calculationResult.correlationCoefficient = this.roundNumber(correlationCoefficient);
@@ -71,12 +63,12 @@ export class CalculationService {
     }
 
     /**
-     * rounds pointvalues on two decimal places
-     * @param  {IPoint_Core} point
-     * @returns {IPoint_Core}
+     * rounds point values on two decimal places
+     * @param  {IPoint} point
+     * @returns {IPoint}
      */
-    private roundPoint(point: IPoint_Core): IPoint_Core {
-        return <IPoint_Core>{ x: this.roundNumber(point.x), y: this.roundNumber(point.y) };
+    private roundPoint(point: IPoint): IPoint {
+        return <IPoint>{ x: this.roundNumber(point.x), y: this.roundNumber(point.y) };
     }
 
     /**
@@ -89,18 +81,5 @@ export class CalculationService {
                 return this.calculate(points);
             }),
         );
-    }
-
-    /**
-     * Converts points to core points
-     * @param  {IPoint[]} points
-     * @returns {IPoint_Core[]}
-     */
-    private convertPoints(points: IPoint[]): IPoint_Core[] {
-        const corePoints: IPoint_Core[] = [];
-        for (const point of points) {
-            corePoints.push({ x: point.value.x, y: point.value.y });
-        }
-        return corePoints;
     }
 }

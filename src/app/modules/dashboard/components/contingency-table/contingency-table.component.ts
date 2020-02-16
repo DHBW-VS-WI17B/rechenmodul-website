@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Config } from '@app/config';
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs';
@@ -18,6 +18,7 @@ import { ContingencyTableService } from '../../services';
 export class ContingencyTableComponent implements OnInit, OnDestroy {
     private isDestroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public table: IContingencyTable | undefined = undefined;
+    @ViewChild('contingencyTableForm', { static: false }) contingencyTableForm: ElementRef<HTMLFormElement> | undefined;
 
     public readonly VALUE_TYPE_X = ContingencyTableValueType.x;
     public readonly VALUE_TYPE_Y = ContingencyTableValueType.y;
@@ -54,6 +55,17 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
             this.table = table;
             this.changeDetection.markForCheck();
         });
+    }
+
+    public saveTable(table: IContingencyTable): void {
+        if (!this.contingencyTableForm) {
+            return;
+        }
+        const formValid = this.contingencyTableForm.nativeElement.checkValidity();
+        if (!formValid) {
+            return;
+        }
+        this.contingencyTableService.setTable(table);
     }
 
     /**
@@ -108,18 +120,25 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
         switch (valueType) {
             case this.VALUE_TYPE_X:
                 this.table.x[index1] = updatedValue;
-                this.contingencyTableService.updateValueTypeX(currentValue, updatedValue);
                 break;
             case this.VALUE_TYPE_Y:
                 this.table.y[index1] = updatedValue;
-                this.contingencyTableService.updateValueTypeY(currentValue, updatedValue);
                 break;
             case this.VALUE_TYPE_H:
                 if (this.table.h[index1] === undefined || index2 === undefined) {
                     break;
                 }
                 this.table.h[index1][index2] = updatedValue;
-                this.contingencyTableService.updateValueTypeH(this.table.x[index1], this.table.y[index2], currentValue, updatedValue);
+                if (currentValue === undefined) {
+                    if (this.table.x[this.table.x.length - 1] !== undefined) {
+                        this.table.x.push(undefined);
+                        this.table.h[this.table.h.length] = _.fill(Array(this.table.y.length), undefined);
+                    }
+                    if (this.table.y[this.table.y.length - 1] !== undefined) {
+                        this.table.y.push(undefined);
+                        this.table.h[index1].push(undefined);
+                    }
+                }
                 break;
         }
     }

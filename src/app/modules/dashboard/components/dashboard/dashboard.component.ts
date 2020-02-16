@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { FileImportService, PointsService } from '../../services';
 
@@ -6,10 +6,13 @@ import { FileImportService, PointsService } from '../../services';
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 /** @class Base DashboardComponent */
 export class DashboardComponent implements OnInit {
+    public activeTabIndex: number = 0;
+
     /**
      * @param  {FileImportService} fileImportService
      * @param  {PointsService} pointsService
@@ -17,6 +20,10 @@ export class DashboardComponent implements OnInit {
     constructor(private fileImportService: FileImportService, private pointsService: PointsService) {}
 
     ngOnInit() {}
+
+    public changeTab(event: any): void {
+        this.activeTabIndex = event.index || 0;
+    }
 
     /**
      * opens the file Dialog of the explorer to import a specific file
@@ -50,6 +57,6 @@ export class DashboardComponent implements OnInit {
      * Deletes all points out of the list
      */
     public reset(): void {
-        this.pointsService.reset();
+        this.pointsService.setPoints([]);
     }
 }

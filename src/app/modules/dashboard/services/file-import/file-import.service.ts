@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { IPointValue } from '../../interfaces';
+import { IPoint } from '../../interfaces';
 import { PointsService } from '../points/points.service';
 
 @Injectable({
@@ -43,9 +43,9 @@ export class FileImportService {
      * Parses CSV-string to points
      * @param  {string} csv
      */
-    private parseCSVToPointValues(csv: string): IPointValue[] {
+    private parseCSVToPointValues(csv: string): IPoint[] {
         const lines = csv.split('\n');
-        const pointValues: IPointValue[] = [];
+        const pointValues: IPoint[] = [];
         for (const line of lines) {
             let values = line.split(';');
             values = _.map(values, value => value.replace(',', '.'));
@@ -54,7 +54,7 @@ export class FileImportService {
             if (isNaN(x) || isNaN(y)) {
                 continue;
             }
-            const pointValue: IPointValue = {
+            const pointValue: IPoint = {
                 x: x,
                 y: y,
             };
@@ -65,10 +65,9 @@ export class FileImportService {
 
     /**
      * set points
-     * @param  {IPointValue[]} pointValues
+     * @param  {IPoint[]} pointValues
      */
-    private setPoints(pointValues: IPointValue[]): void {
-        this.pointsService.reset();
-        this.pointsService.addPoints(pointValues);
+    private setPoints(pointValues: IPoint[]): void {
+        this.pointsService.setPoints(pointValues);
     }
 }

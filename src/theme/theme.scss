@@ -17,7 +17,7 @@ app-root {
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 64px;
+    top: 128px;
     bottom: 0;
     left: 0;
     right: 0;
@@ -25,7 +25,7 @@ app-root {
 
 @media(max-width: 599px) {
     app-root {
-        top: 56px;
+        top: 112px;
     }
 }
 
@@ -50,4 +50,9 @@ header {
 
 mat-card-content {
     padding: 0px 16px;
+}
+
+.mat-tab-label-active {
+    color: #fff !important;
+    opacity: 1 !important;
 }
