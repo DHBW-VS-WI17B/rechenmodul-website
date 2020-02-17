@@ -1,5 +1,8 @@
 # rechenmodul-website
 
+[![CI](https://img.shields.io/github/workflow/status/DHBW-VS-WI17B/rechenmodul-website/CI/master)](https://github.com/DHBW-VS-WI17B/rechenmodul-website/actions) [![License](https://img.shields.io/github/license/DHBW-VS-WI17B/rechenmodul-website)](https://github.com/DHBW-VS-WI17B/rechenmodul-website/blob/master/LICENSE)
+
+
 A tool for calculating statistical metrics.
 
 ## Development guide
