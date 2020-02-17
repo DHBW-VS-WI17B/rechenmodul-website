@@ -53,7 +53,7 @@ lint:
         - master
         - merge_requests
 
-deploy:
+.deploy:
     image: alpine
     before_script:
         - apk --no-cache add lftp ca-certificates openssh
