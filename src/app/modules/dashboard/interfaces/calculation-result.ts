@@ -1,4 +1,4 @@
-import { IPoint, IRegressionGraph } from 'rechenmodul-core';
+import { IPoint, IRegressionGraph } from '@dhbw-vs-wi17b/rechenmodul-core';
 
 export interface ICalculationResult {
     oneDimensionalMean: IPoint;

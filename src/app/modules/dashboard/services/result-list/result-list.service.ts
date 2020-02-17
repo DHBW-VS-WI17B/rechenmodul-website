@@ -1,7 +1,7 @@
 import { formatNumber } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Config } from '@app/config';
-import { IRegressionGraph } from 'rechenmodul-core/dist';
+import { IRegressionGraph } from '@dhbw-vs-wi17b/rechenmodul-core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ICalculationResult, IResultListItem } from '../../interfaces';

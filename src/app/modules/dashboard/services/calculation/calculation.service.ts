@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
+import {
+    calcCorrelationCoefficient,
+    calcCovariance,
+    calcOneDimensionalMean,
+    calcRegressionGraph,
+    calcVariance,
+} from '@dhbw-vs-wi17b/rechenmodul-core';
 import * as _ from 'lodash';
-import { calcCorrelationCoefficient, calcCovariance, calcOneDimensionalMean, calcRegressionGraph, calcVariance } from 'rechenmodul-core';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ICalculationResult, IPoint } from '../../interfaces';

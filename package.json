@@ -34,7 +34,7 @@
         "chart.js": "2.9.3",
         "hammerjs": "^2.0.8",
         "lodash": "4.17.15",
-        "rechenmodul-core": "git+https://gitlab+deploy-token-5:Lk37HWuVWBqsmTtvLVvv@gitlab.robingenz.de/dhbw-vs-projekt-1/rechenmodul-core.git#v2.0.0",
+        "@dhbw-vs-wi17b/rechenmodul-core": "2.0.1",
         "rxjs": "6.4.0",
         "tslib": "1.10.0",
         "zone.js": "0.9.1"

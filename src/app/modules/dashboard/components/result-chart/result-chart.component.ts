@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Config } from '@app/config';
+import { IPoint, IRegressionGraph } from '@dhbw-vs-wi17b/rechenmodul-core';
 import { Chart, ChartPoint } from 'chart.js';
 import * as _ from 'lodash';
-import { IPoint, IRegressionGraph } from 'rechenmodul-core/dist';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ResultChartService } from '../../services';
