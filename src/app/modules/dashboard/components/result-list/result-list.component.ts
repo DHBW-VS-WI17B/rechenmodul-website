@@ -27,9 +27,6 @@ export class ResultListComponent implements OnInit, OnDestroy {
         this.init();
     }
 
-    /**
-     * Unsuscribe from Pointobservable
-     */
     ngOnDestroy() {
         this.isDestroyed$.next(true);
         this.isDestroyed$.complete();

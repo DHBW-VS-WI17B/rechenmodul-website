@@ -8,9 +8,10 @@ export class ValidationService {
     constructor() {}
 
     /**
-     * validates a inout string using regex
+     * Validates a string using regex
      * @param  {string} regExp Regex to validate the string
      * @param  {string} value string to validate
+     * @returns  {boolean} Returns true if the string is valid
      */
     public validate(regExp: string, value: string): boolean {
         const regExpObj: RegExp = new RegExp(regExp);

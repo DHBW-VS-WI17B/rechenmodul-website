@@ -12,13 +12,13 @@ import { PointsService } from '../points/points.service';
 /** @class ContingencyTableService. */
 export class ContingencyTableService {
     /**
-     * creates a instance of the service
+     * Creates a instance of the service
      * @param  {PointsService} PointsService
      */
     constructor(private pointsService: PointsService) {}
 
     /**
-     * returns Contingency table as observable
+     * Returns Contingency table as observable
      * @returns {Observable<IContingencyTable>}
      */
     public get table$(): Observable<IContingencyTable> {
@@ -29,13 +29,17 @@ export class ContingencyTableService {
         );
     }
 
+    /**
+     * Sets the table object
+     * @param  {IContingencyTable} table
+     */
     public setTable(table: IContingencyTable): void {
         const points = this.convertContingencyTableToPoints(table);
         this.pointsService.setPoints(points);
     }
 
     /**
-     * convert Points to contingency table
+     * Converts point array to contingency table object
      * @param  {IPoint[]} points
      * @returns {IContingencyTable}
      */
@@ -74,8 +78,13 @@ export class ContingencyTableService {
         return table;
     }
 
+    /**
+     * Converts contingency table object to point array
+     * @param  {IContingencyTable} contingencyTable
+     * @returns {IPoint[]}
+     */
     private convertContingencyTableToPoints(contingencyTable: IContingencyTable): IPoint[] {
-        const pointValues: IPoint[] = [];
+        const points: IPoint[] = [];
         for (let i = 0; i < contingencyTable.h.length; i++) {
             const x = contingencyTable.x[i];
             if (x === undefined) {
@@ -92,15 +101,15 @@ export class ContingencyTableService {
                         x: x,
                         y: y,
                     };
-                    pointValues.push(pointValue);
+                    points.push(pointValue);
                 });
             }
         }
-        return pointValues;
+        return points;
     }
 
     /**
-     * fills the empty cells of the table
+     * Fills the empty cells of the table
      * @param  {IContingencyTable} table
      * @returns {IContingencyTable}
      */

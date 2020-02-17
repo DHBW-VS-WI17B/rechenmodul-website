@@ -17,9 +17,10 @@ export class PointsService {
     private pointsSubj: BehaviorSubject<IPoint[]> = new BehaviorSubject<IPoint[]>([]);
 
     /**
-     * Creates Service Instance
+     * Creates the service instance
      * @param  {ValidationService} ValidationService
      * @param  {LogService} LogService
+     * @param  {NotificationService} notificationService
      */
     constructor(
         private validationService: ValidationService,
@@ -28,7 +29,7 @@ export class PointsService {
     ) {}
 
     /**
-     * sets Points of the subject
+     * Sets new points
      * @param  {IPoint[]} points
      */
     public setPoints(points: IPoint[]): void {
@@ -41,7 +42,7 @@ export class PointsService {
     }
 
     /**
-     * gets all points out of the subject
+     * Gets all points as observable
      *  @returns {Observable<IPoint[]>}
      */
     public get points$(): Observable<IPoint[]> {
@@ -50,11 +51,9 @@ export class PointsService {
     }
 
     /**
-     * validate the given points
-     * Returns true: if valid
-     * Returns false: if invalid
+     * Validates the given points
      * @param  {IPoint[]} points
-     * @returns {boolean}
+     * @returns {boolean} Returns true if all points have valid values
      */
     private validatePoints(points: IPoint[]): boolean {
         this.logService.log(LogLevel.debug, this.TAG, 'Validate points.', []);
@@ -69,16 +68,16 @@ export class PointsService {
             return false;
         }
         // Validate number of different point values
-        const numberOfDifferentPointValues = this.getNumberOfDifferentPoints(points);
-        if (numberOfDifferentPointValues > Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES) {
+        const numberOfDifferentPoints = this.getNumberOfDifferentPoints(points);
+        if (numberOfDifferentPoints > Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES) {
             this.notificationService.showNotification({
                 message:
                     `Fehlgeschlagen: Maximaler Umfang von ${Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES} ` +
                     `verschiedenen Punkten überschritten!`,
             });
         }
-        if (numberOfDifferentPointValues > Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES) {
-            this.logService.log(LogLevel.warn, this.TAG, 'Number of different point values too large.', [numberOfDifferentPointValues]);
+        if (numberOfDifferentPoints > Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES) {
+            this.logService.log(LogLevel.warn, this.TAG, 'Number of different point values too large.', [numberOfDifferentPoints]);
             return false;
         }
         // Validate point values
@@ -100,29 +99,27 @@ export class PointsService {
     }
 
     /**
-     * get number of different PointValues in the subject
+     * Get number of different points in the subject
      * @param  {IPoint[]} points
      * @returns {number}
      */
     public getNumberOfDifferentPoints(points: IPoint[]): number {
-        const differentPointValues: IPoint[] = [];
+        const differentPoints: IPoint[] = [];
         for (const point of points) {
-            const index = _.findIndex(differentPointValues, pointValue => {
+            const index = _.findIndex(differentPoints, pointValue => {
                 return pointValue.x === point.x && pointValue.y === point.y;
             });
             if (index < 0) {
-                differentPointValues.push(point);
+                differentPoints.push(point);
             }
         }
-        return differentPointValues.length;
+        return differentPoints.length;
     }
 
     /**
-     * validate point value
-     * Returns true: if valid
-     * Returns false: if invalid
+     * Validates a point
      * @param  {IPointValue} pointValue
-     * @returns {boolean}
+     * @returns {boolean} Returns true if the point is valid
      */
     private validatePoint(pointValue: IPoint): boolean {
         const xIsValid = this.validatePointValueNumber(pointValue.x) && Math.abs(pointValue.x) <= Number.MAX_SAFE_INTEGER;
@@ -131,11 +128,9 @@ export class PointsService {
     }
 
     /**
-     * validate PointValue
-     * Returns true: if valid
-     * Returns false: if invalid
+     * Validates a point value number
      * @param  {number} value of the point
-     * @returns {boolean}
+     * @returns {boolean} Returns true if the point value number is valid
      */
     private validatePointValueNumber(value: number): boolean {
         return this.validationService.validate(Config.REGEX_POINT_VALUE_NUMBER, value.toString());

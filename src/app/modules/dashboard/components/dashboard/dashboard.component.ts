@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material';
 import * as _ from 'lodash';
 import { FileImportService, PointsService } from '../../services';
 
@@ -21,12 +22,16 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() {}
 
-    public changeTab(event: any): void {
+    /**
+     * Changes the active tab
+     * @param  {MatTabChangeEvent} event
+     */
+    public changeTab(event: MatTabChangeEvent): void {
         this.activeTabIndex = event.index || 0;
     }
 
     /**
-     * opens the file Dialog of the explorer to import a specific file
+     * Opens the file dialog of the explorer to import a specific file
      */
     public openFileDialog(): void {
         const elm = document.getElementById('file_input');

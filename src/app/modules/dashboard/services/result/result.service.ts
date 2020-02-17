@@ -9,7 +9,7 @@ import { CalculationService } from '../calculation/calculation.service';
 /** @class ResultService. */
 export class ResultService {
     /**
-     * Create Instance of the Service
+     * Creates the service instance
      * @param  {CalculationService} CalculationService
      */
     constructor(private calculationService: CalculationService) {}

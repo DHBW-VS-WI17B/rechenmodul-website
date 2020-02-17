@@ -14,6 +14,11 @@ export class NotificationService {
 
     constructor(private snackBar: MatSnackBar, private logService: LogService) {}
 
+    /**
+     * Displays the notification
+     * @param  {INotification} data
+     * @returns  {Promise<MatSnackBarDismiss>}
+     */
     public showNotification(data: INotification): Promise<MatSnackBarDismiss> {
         const snackBarRef = this.snackBar.openFromComponent(NotificationComponent, {
             duration: this.DURATION_IN_SECONDS * 1000,

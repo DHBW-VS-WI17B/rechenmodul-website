@@ -20,8 +20,8 @@ export class FileImportService {
      */
     public async importFile(file: Blob): Promise<void> {
         const text = await this.getFileContentAsText(file);
-        const pointValues = this.parseCSVToPointValues(text);
-        this.setPoints(pointValues);
+        const points = this.parseCSVToPoints(text);
+        this.setPoints(points);
     }
 
     /**
@@ -42,10 +42,11 @@ export class FileImportService {
     /**
      * Parses CSV-string to points
      * @param  {string} csv
+     * @returns  {IPoint[]}
      */
-    private parseCSVToPointValues(csv: string): IPoint[] {
+    private parseCSVToPoints(csv: string): IPoint[] {
         const lines = csv.split('\n');
-        const pointValues: IPoint[] = [];
+        const points: IPoint[] = [];
         for (const line of lines) {
             let values = line.split(';');
             values = _.map(values, value => value.replace(',', '.'));
@@ -58,16 +59,16 @@ export class FileImportService {
                 x: x,
                 y: y,
             };
-            pointValues.push(pointValue);
+            points.push(pointValue);
         }
-        return pointValues;
+        return points;
     }
 
     /**
-     * set points
-     * @param  {IPoint[]} pointValues
+     * Set points
+     * @param  {IPoint[]} points
      */
-    private setPoints(pointValues: IPoint[]): void {
-        this.pointsService.setPoints(pointValues);
+    private setPoints(points: IPoint[]): void {
+        this.pointsService.setPoints(points);
     }
 }

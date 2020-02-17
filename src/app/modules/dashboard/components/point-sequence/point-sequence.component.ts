@@ -34,8 +34,8 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
     public pointForm: FormGroup | undefined;
 
     /**
-     * @param  {PointSequenceService} privatepointSequenceService
-     * @param  {ChangeDetectorRef} privatechangeDetection
+     * @param  {PointSequenceService} pointSequenceService
+     * @param  {ChangeDetectorRef} changeDetection
      */
     constructor(private pointSequenceService: PointSequenceService, private changeDetection: ChangeDetectorRef) {}
 
@@ -55,7 +55,7 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Suscribes to the PointObservable
+     * Subscribes to the PointObservable
      */
     private init(): void {
         this.pointSequenceService.points$.pipe(takeUntil(this.isDestroyed$)).subscribe(points => {
@@ -64,6 +64,10 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Saves point sequence elements
+     * @param  {IPointSequenceElement[]} elements
+     */
     public saveElements(elements: IPointSequenceElement[]): void {
         if (!this.pointSequenceForm) {
             return;
@@ -72,15 +76,13 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
         if (!formValid) {
             return;
         }
-        const pointValues = elements.map(element => element.value);
-        this.pointSequenceService.setPoints(pointValues);
+        const points = elements.map(element => element.value);
+        this.pointSequenceService.setPoints(points);
     }
 
     /**
      * Converts IPoint-Objects to PointSequence-Objects
      * @param  {IPoint[]} points
-     * @param  {IPointSequenceElement[]} existingElements
-     * @param  {boolean} globalSelectStatus
      * @returns {IPointSequenceElement[]}
      */
     public convertPointsToPointSequenceElements(points: IPoint[]): IPointSequenceElement[] {
@@ -108,12 +110,12 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
             return true;
         }
         const points = this.elements.map(element => element.value);
-        const numberOfDifferentPointValues = this.pointSequenceService.getNumberOfDifferentPoints(points);
+        const numberOfDifferentPoints = this.pointSequenceService.getNumberOfDifferentPoints(points);
         const pointValueAlreadyExists = _.find(
             this.elements,
             element => element.value.x === this.inputValueX && element.value.y === this.inputValueY,
         );
-        if (numberOfDifferentPointValues < Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES && this.elements.length < Config.MAX_SAMPLE_SIZE) {
+        if (numberOfDifferentPoints < Config.MAX_NUMBER_OF_DIFFERENT_POINT_VALUES && this.elements.length < Config.MAX_SAMPLE_SIZE) {
             return false;
         } else if (!!pointValueAlreadyExists && this.elements.length < Config.MAX_SAMPLE_SIZE) {
             return false;
@@ -122,7 +124,7 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Mastertoggle for the selection of all elements
+     * Toggles the selection of all elements
      * @param  {boolean} status
      */
     public masterToggle(status: boolean): void {
@@ -138,7 +140,7 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * unselect all element in the list of points
+     * Unselect all element in the list of points
      */
     private unselectAllElements(): void {
         this.elements.forEach(element => (element.isSelected = false));
@@ -146,8 +148,8 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
 
     /**
      * Add a Point with value x and y, to the Obserable of points
-     * @param  {number|undefined} x The x value of the point
-     * @param  {number|undefined} y The y value of the point
+     * @param  {number | undefined | null} x The x value of the point
+     * @param  {number | undefined | null} y The y value of the point
      */
     public addElement(x: number | undefined | null, y: number | undefined | null): void {
         if (_.isNil(x) || _.isNil(y)) {
@@ -164,6 +166,11 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
         this.elements.push(element);
     }
 
+    /**
+     * Updates an element value
+     * @param  {IPointSequenceElement} element
+     * @param  {IPoint} value
+     */
     public updateElementValue(element: IPointSequenceElement, value: IPoint): void {
         element.value = {
             x: value.x,
@@ -188,11 +195,9 @@ export class PointSequenceComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Returns:
-     * true: if all elements selected
-     * false: if not all elements selected
+     * Checks if all elements are selected
      * @param  {IPointSequenceElement[]} elements All Elements in the list
-     * @return {boolean}
+     * @return {boolean} True if all elements are selected
      */
     private areAllElementsSelected(elements: IPointSequenceElement[]): boolean {
         const selectedElements = this.getSelectedElements(elements);

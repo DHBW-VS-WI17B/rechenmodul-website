@@ -57,6 +57,10 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Saves the table objet
+     * @param  {IContingencyTable} table
+     */
     public saveTable(table: IContingencyTable): void {
         if (!this.contingencyTableForm) {
             return;
@@ -69,10 +73,10 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * gets the value for a specific type out of the array on [index1][index2]
+     * Gets the value for a specific type out of the array on [index1][index2]
      * @param  {ContingencyTableValueType} valueType Type if x-Value, y-Value or frequency
      * @param  {number} index1
-     * @param  {number|undefined} index2
+     * @param  {number | undefined} index2
      * @returns {number | undefined}
      */
     public getValueFor(valueType: ContingencyTableValueType, index1: number, index2: number | undefined): number | undefined {
@@ -98,11 +102,11 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * updates the value for a specific type in the array on [index1][index2]
+     * Updates the value for a specific type in the array on [index1][index2]
      * @param  {ContingencyTableValueType} valueType Type if x-Value, y-Value or frequency
-     * @param  {number|undefined|null} updatedValue new value
+     * @param  {number | undefined | null} updatedValue new value
      * @param  {number} index1
-     * @param  {number|undefined} index2
+     * @param  {number | undefined} index2
      */
     public updateValueFor(
         valueType: ContingencyTableValueType,
@@ -144,10 +148,10 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * gets the placeholder for a specific type out of the array on [index1][index2]
+     * Gets the placeholder for a specific type out of the array on [index1][index2]
      * @param  {ContingencyTableValueType} valueType
-     * @param  {number|undefined} index1
-     * @param  {number|undefined} index2
+     * @param  {number | undefined} index1
+     * @param  {number | undefined} index2
      * @returns {string}
      */
     public getPlaceholderFor(valueType: ContingencyTableValueType, index1: number | undefined, index2: number | undefined): string {
@@ -176,9 +180,9 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * gets the total frequency for a specific type
+     * Gets the total frequency for a specific type
      * @param  {ContingencyTableValueType} valueType HX = Frequency X-Value, HY = Frequency Y-Value, HXY = Frequency Points
-     * @param  {number|undefined} index
+     * @param  {number | undefined} index
      * @returns {number | undefined}
      */
     public getSumFor(valueType: ContingencyTableValueType, index: number | undefined): number | undefined {
@@ -216,9 +220,9 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Track by in ngFor for a better performance
+     * Returns the unique identifier for an item
      * @param  {number} index
-     * @param  {number|undefined} item
+     * @param  {number | undefined} item
      * @returns {number}
      */
     public trackByFn(index: number, item: number | undefined): number {
@@ -226,8 +230,8 @@ export class ContingencyTableComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Convert number to unicode subscript text
-     * @param  {number|undefined} num
+     * Converts number to unicode subscript text
+     * @param  {number | undefined} num
      * @returns {string}
      */
     private toUnicodeSubscript(num: number | undefined): string {

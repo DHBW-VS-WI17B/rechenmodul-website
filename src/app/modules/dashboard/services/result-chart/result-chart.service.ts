@@ -11,13 +11,13 @@ import { ResultService } from '../result/result.service';
 /** @class ResultChartService. */
 export class ResultChartService {
     /**
-     * Creates a service instance
+     * Creates the service instance
      * @param  {ResultService} ResultService
      */
     constructor(private resultService: ResultService) {}
 
     /**
-     * Get Resultgraphitem
+     * Get items of result chart
      * @returns {Observable<IResultGraphItem>}
      */
     public get items$(): Observable<IResultGraphItem> {
@@ -25,7 +25,7 @@ export class ResultChartService {
     }
 
     /**
-     * convert CalculationResult to ResultGraphItem
+     * Converts CalculationResult to ResultGraphItem
      * @param  {ICalculationResult|undefined} result
      * @returns {IResultGraphItem}
      */

@@ -15,19 +15,23 @@ export class PointSequenceService {
     constructor(private pointsService: PointsService) {}
 
     /**
-     * Gets all Points
+     * Gets the points observable
      * @returns {Observable<IPoint[]>}
      */
     public get points$(): Observable<IPoint[]> {
         return this.pointsService.points$;
     }
 
+    /**
+     * Gets all points
+     * @param  {IPoint[]} points
+     */
     public setPoints(points: IPoint[]): void {
         this.pointsService.setPoints(points);
     }
 
     /**
-     * get number of different points in the whole list of points
+     * Get number of different points in the whole list of points
      * @param  {IPoint[]} points
      * @returns {number}
      */

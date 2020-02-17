@@ -12,13 +12,13 @@ import { PointsService } from '../points/points.service';
 /** @class CalculationService. */
 export class CalculationService {
     /**
-     * creates a instance of the service
+     * Creates a instance of the service
      * @param  {PointsService} PointsService
      */
     constructor(private pointsService: PointsService) {}
 
     /**
-     * calculates all results with the given points
+     * Calculates all results with the given points
      * @param  {IPoint[]} points
      * @returns {Promise<ICalculationResult | undefined>}
      */
@@ -54,7 +54,7 @@ export class CalculationService {
     }
 
     /**
-     * rounds number on two decimal places
+     * Rounds number on two decimal places
      * @param  {number} num
      * @returns {number}
      */
@@ -63,7 +63,7 @@ export class CalculationService {
     }
 
     /**
-     * rounds point values on two decimal places
+     * Rounds point values on two decimal places
      * @param  {IPoint} point
      * @returns {IPoint}
      */

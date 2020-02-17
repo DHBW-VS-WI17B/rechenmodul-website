@@ -38,7 +38,7 @@ export class ResultChartComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Suscribes to the PointObservable and map to pointvalues to scatterpoints
+     * Suscribes to the PointObservable and map points to scatterpoints
      */
     private init(): void {
         this.chart = this.createChart([], []);

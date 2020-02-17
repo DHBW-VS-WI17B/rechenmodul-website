@@ -19,7 +19,7 @@ export class ResultListService {
     constructor(private resultService: ResultService) {}
 
     /**
-     * gets the converted ResultList as Observable
+     * Gets the converted ResultList as Observable
      * @returns {Observable<IResultListItem[]>}
      */
     public get items$(): Observable<IResultListItem[]> {
@@ -27,7 +27,7 @@ export class ResultListService {
     }
 
     /**
-     * converts the CalculationResult to ResultListItems
+     * Converts the CalculationResult to ResultListItems
      * @param  {ICalculationResult|undefined} result
      * @returns {IResultListItem[]}
      */
@@ -63,7 +63,7 @@ export class ResultListService {
         return listItems;
     }
     /**
-     * get the RegressionGraph equation
+     * Gets the RegressionGraph equation
      * @param  {IRegressionGraph} regressionGraph
      * @returns {string}
      */
@@ -81,7 +81,7 @@ export class ResultListService {
     }
 
     /**
-     * returns the qualitiy in words
+     * Returns the qualitiy in words
      * @param  {number} quality
      * @returns {string}
      */
@@ -102,7 +102,7 @@ export class ResultListService {
     }
 
     /**
-     * format a number to only two decimal places
+     * Formats a number to only two decimal places
      * @param  {number} value
      * @returns {string}
      */
